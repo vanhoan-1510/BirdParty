@@ -34,6 +34,8 @@ public class PlayerMovement : MonoBehaviour
     Vector3 moveDirection;
 
     Rigidbody rb;
+    public GameObject player;
+    Animation anim;
 
     //[HideInInspector] public TextMeshProUGUI text_speed;
 
@@ -67,6 +69,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void MyInput()
     {
+        
         horizontalInput = Input.GetAxisRaw("Horizontal");
         verticalInput = Input.GetAxisRaw("Vertical");
 
@@ -74,7 +77,7 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetKey(jumpKey) && readyToJump && grounded)
         {
             readyToJump = false;
-
+            //GameManager.Instance.SetAnimation(player, "animation", 10);
             //GameManager.Instance.ChangeStateTo(SlimeAnimationState.Jump);
 
             Jump();
@@ -87,6 +90,8 @@ public class PlayerMovement : MonoBehaviour
     {
         // calculate movement direction
         moveDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
+
+        //rb.velocity = new Vector3(horizontalInput * moveSpeed, rb.velocity.y, verticalInput * moveSpeed);
 
         // on ground
         if (grounded)
@@ -118,6 +123,7 @@ public class PlayerMovement : MonoBehaviour
     {
         // reset y velocity
         rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+        Debug.Log("Jump");
 
         rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
     }
