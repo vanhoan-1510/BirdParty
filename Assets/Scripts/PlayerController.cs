@@ -8,21 +8,24 @@ public class PlayerController : MonoBehaviour
     public float moveSpeed = 2f;
     public float sprintSpeed = 5f;
     public float rotationSpeed = 15f;
+    public float animationBlendSpeed = 2f;
+    public float jumpSpeed = 5f;
     public Camera cam;
     Animator animator;
 
     float mDesiredRotation = 0f;
     float mDesiredAnimationSpeed = 0f;
-    public float animationBlendSpeed = 2f;
     bool mSprinting = false;
 
     public float mSpeedY = 0f;
     public float mGravity = -9.81f;
-    public float jumpHeight = 3f;
     bool mJumping = false;
 
     void Start()
     {
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+
         controller = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
     }
@@ -42,8 +45,14 @@ public class PlayerController : MonoBehaviour
         {
             mJumping = true;
             animator.SetTrigger("Jump");
+            Debug.Log("Jump");         
+            //animator.SetBool("isJump", true);
 
-            mSpeedY += jumpHeight; // Apply jump to the player
+            mSpeedY += jumpSpeed  ; // Apply jump to the player
+        }
+        else
+        {
+            mJumping = false;
         }
 
         if (!controller.isGrounded)
@@ -55,13 +64,14 @@ public class PlayerController : MonoBehaviour
             mSpeedY = 0f;
         }
 
-        animator.SetFloat("SpeedY", mSpeedY / jumpHeight); // Set the animation speed
+        animator.SetFloat("SpeedY", mSpeedY / jumpSpeed); // Set the animation speed
         if(mJumping && mSpeedY < 0f)
         {
             RaycastHit hit;
-            if(Physics.Raycast(transform.position, Vector3.down, out hit, 0.1f))
+            if (Physics.Raycast(transform.position, Vector3.down, out hit, .5f, LayerMask.GetMask("Default")))
             {
                 mJumping = false;
+                animator.SetTrigger("Land");
             }
         }
 
