@@ -1,6 +1,7 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class PlayerController : MonoBehaviour
 {
@@ -10,6 +11,8 @@ public class PlayerController : MonoBehaviour
     public float rotationSpeed = 15f;
     public float animationBlendSpeed = 2f;
     public float jumpSpeed = 5f;
+    public float bounceForce = 5f;
+    public float minBounceAngle = 45f;
     public Camera cam;
     Animator animator;
 
@@ -102,5 +105,22 @@ public class PlayerController : MonoBehaviour
         Quaternion targetRotation = Quaternion.Euler(0, mDesiredRotation, 0);
         transform.rotation = Quaternion.Lerp(currentRotation, targetRotation, rotationSpeed * Time.deltaTime);
 
+    }
+
+    private void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        // Kiểm tra layer của đối tượng va chạm
+        if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Bounce"))
+        {
+            Vector3 characterBottom = controller.bounds.center - new Vector3(0f, controller.bounds.extents.y, 0f);
+            Vector3 objectTop = hit.collider.bounds.center + new Vector3(0f, hit.collider.bounds.extents.y, 0f);
+
+            // Kiểm tra điểm dưới của nhân vật chạm vào điểm top của đối tượng
+            if (characterBottom.y >= objectTop.y)
+            {
+                // Áp dụng lực nảy lên
+                mSpeedY = bounceForce;
+            }
+        }
     }
 }
