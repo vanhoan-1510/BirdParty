@@ -1,0 +1,597 @@
+fileFormatVersion: 2
+guid: b3c89a71605916f4ebd5dfe0e02ea10f
+TextureImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 12
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 0
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Server
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Twerk Pout Sticker - Twerk Pout Cute - Discover & Share GIFs_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 809
+        width: 498
+        height: 400
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 08e2cdbb84f550b459c5c912c2a16ae7
+      internalID: 535947317
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Twerk Pout Sticker - Twerk Pout Cute - Discover & Share GIFs_1
+      rect:
+        serializedVersion: 2
+        x: 498
+        y: 809
+        width: 498
+        height: 400
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 80dc0f69a77c10b43949ef869229ea14
+      internalID: -1590089076
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Twerk Pout Sticker - Twerk Pout Cute - Discover & Share GIFs_2
+      rect:
+        serializedVersion: 2
+        x: 996
+        y: 809
+        width: 498
+        height: 400
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 557c953b89e5e704598c31b3775097c0
+      internalID: -1530292137
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Twerk Pout Sticker - Twerk Pout Cute - Discover & Share GIFs_3
+      rect:
+        serializedVersion: 2
+        x: 1494
+        y: 809
+        width: 498
+        height: 400
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dcf74aa1daaac634c8ac54b06f41bf90
+      internalID: -1375458962
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Twerk Pout Sticker - Twerk Pout Cute - Discover & Share GIFs_4
+      rect:
+        serializedVersion: 2
+        x: 1992
+        y: 809
+        width: 498
+        height: 400
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: faf648626c4772b45b7ca7671b0c1109
+      internalID: 982615285
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Twerk Pout Sticker - Twerk Pout Cute - Discover & Share GIFs_5
+      rect:
+        serializedVersion: 2
+        x: 2490
+        y: 809
+        width: 498
+        height: 400
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0bcf0485bf9c48945bfea0e183d8b451
+      internalID: -622197686
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Twerk Pout Sticker - Twerk Pout Cute - Discover & Share GIFs_6
+      rect:
+        serializedVersion: 2
+        x: 2988
+        y: 809
+        width: 498
+        height: 400
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 45dda576aebee3b44a68ee450eb343d4
+      internalID: 1147057194
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Twerk Pout Sticker - Twerk Pout Cute - Discover & Share GIFs_7
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 409
+        width: 498
+        height: 400
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ac489bfbf439b9c4286d699940a8be47
+      internalID: -412463317
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Twerk Pout Sticker - Twerk Pout Cute - Discover & Share GIFs_8
+      rect:
+        serializedVersion: 2
+        x: 498
+        y: 409
+        width: 498
+        height: 400
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fc51d67241c0f724baf2dec697a57c3e
+      internalID: -525872007
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Twerk Pout Sticker - Twerk Pout Cute - Discover & Share GIFs_9
+      rect:
+        serializedVersion: 2
+        x: 996
+        y: 409
+        width: 498
+        height: 400
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 83944d90eface174fb375df49b453ca4
+      internalID: 1841444132
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Twerk Pout Sticker - Twerk Pout Cute - Discover & Share GIFs_10
+      rect:
+        serializedVersion: 2
+        x: 1494
+        y: 409
+        width: 498
+        height: 400
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a2e69133f7a4a184494864f50a77f661
+      internalID: -1337081111
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Twerk Pout Sticker - Twerk Pout Cute - Discover & Share GIFs_11
+      rect:
+        serializedVersion: 2
+        x: 1992
+        y: 409
+        width: 498
+        height: 400
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a649dfe9943e5fa429bfba3f0b32c9c9
+      internalID: 1775592233
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Twerk Pout Sticker - Twerk Pout Cute - Discover & Share GIFs_12
+      rect:
+        serializedVersion: 2
+        x: 2490
+        y: 409
+        width: 498
+        height: 400
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 07fc2419baaf4c04980bf25c3ef4ad9d
+      internalID: 1555426237
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Twerk Pout Sticker - Twerk Pout Cute - Discover & Share GIFs_13
+      rect:
+        serializedVersion: 2
+        x: 2988
+        y: 409
+        width: 498
+        height: 400
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a064ed6a4c692c643833618c21f6265c
+      internalID: -1413950661
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Twerk Pout Sticker - Twerk Pout Cute - Discover & Share GIFs_14
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 9
+        width: 498
+        height: 400
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 848816d30403791419abce14182aacce
+      internalID: 1921441924
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Twerk Pout Sticker - Twerk Pout Cute - Discover & Share GIFs_15
+      rect:
+        serializedVersion: 2
+        x: 498
+        y: 9
+        width: 498
+        height: 400
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b1ea7db4a39fdbd4eab0294f442c64a3
+      internalID: 1654689159
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Twerk Pout Sticker - Twerk Pout Cute - Discover & Share GIFs_16
+      rect:
+        serializedVersion: 2
+        x: 996
+        y: 9
+        width: 498
+        height: 400
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c1d280c331c5aaf4d8cdda3e10d05c50
+      internalID: 210509415
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Twerk Pout Sticker - Twerk Pout Cute - Discover & Share GIFs_17
+      rect:
+        serializedVersion: 2
+        x: 1494
+        y: 9
+        width: 498
+        height: 400
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c413b7be8c54f9a419f9fd5bd0a33dcf
+      internalID: 437903900
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Twerk Pout Sticker - Twerk Pout Cute - Discover & Share GIFs_18
+      rect:
+        serializedVersion: 2
+        x: 1992
+        y: 9
+        width: 498
+        height: 400
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a93e53de48bfac74bbf25266739376ca
+      internalID: -1231593962
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Twerk Pout Sticker - Twerk Pout Cute - Discover & Share GIFs_19
+      rect:
+        serializedVersion: 2
+        x: 2490
+        y: 9
+        width: 498
+        height: 400
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e1e554f8c7a3b7746bd35be734cc11b0
+      internalID: -186763657
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Twerk Pout Sticker - Twerk Pout Cute - Discover & Share GIFs_20
+      rect:
+        serializedVersion: 2
+        x: 2988
+        y: 9
+        width: 498
+        height: 400
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a3c4ed93213dcb04ebb2304d2a41b971
+      internalID: -984873244
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 8dd258f3da5ce2f49b8fa12e39dc3c91
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      Twerk Pout Sticker - Twerk Pout Cute - Discover & Share GIFs_0: 535947317
+      Twerk Pout Sticker - Twerk Pout Cute - Discover & Share GIFs_1: -1590089076
+      Twerk Pout Sticker - Twerk Pout Cute - Discover & Share GIFs_10: -1337081111
+      Twerk Pout Sticker - Twerk Pout Cute - Discover & Share GIFs_11: 1775592233
+      Twerk Pout Sticker - Twerk Pout Cute - Discover & Share GIFs_12: 1555426237
+      Twerk Pout Sticker - Twerk Pout Cute - Discover & Share GIFs_13: -1413950661
+      Twerk Pout Sticker - Twerk Pout Cute - Discover & Share GIFs_14: 1921441924
+      Twerk Pout Sticker - Twerk Pout Cute - Discover & Share GIFs_15: 1654689159
+      Twerk Pout Sticker - Twerk Pout Cute - Discover & Share GIFs_16: 210509415
+      Twerk Pout Sticker - Twerk Pout Cute - Discover & Share GIFs_17: 437903900
+      Twerk Pout Sticker - Twerk Pout Cute - Discover & Share GIFs_18: -1231593962
+      Twerk Pout Sticker - Twerk Pout Cute - Discover & Share GIFs_19: -186763657
+      Twerk Pout Sticker - Twerk Pout Cute - Discover & Share GIFs_2: -1530292137
+      Twerk Pout Sticker - Twerk Pout Cute - Discover & Share GIFs_20: -984873244
+      Twerk Pout Sticker - Twerk Pout Cute - Discover & Share GIFs_3: -1375458962
+      Twerk Pout Sticker - Twerk Pout Cute - Discover & Share GIFs_4: 982615285
+      Twerk Pout Sticker - Twerk Pout Cute - Discover & Share GIFs_5: -622197686
+      Twerk Pout Sticker - Twerk Pout Cute - Discover & Share GIFs_6: 1147057194
+      Twerk Pout Sticker - Twerk Pout Cute - Discover & Share GIFs_7: -412463317
+      Twerk Pout Sticker - Twerk Pout Cute - Discover & Share GIFs_8: -525872007
+      Twerk Pout Sticker - Twerk Pout Cute - Discover & Share GIFs_9: 1841444132
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
