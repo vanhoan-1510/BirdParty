@@ -54,11 +54,11 @@ public class PlayerController : MonoBehaviour
         if (Input.GetButtonDown("Jump") && !mJumping && grounded)
         {
             mJumping = true;
-            animator.SetTrigger("Jump");
+            animator.SetBool("Jumping", true);
             Debug.Log("Jump");
 
             rb.AddForce(Vector3.up * jumpSpeed, ForceMode.VelocityChange);
-            rb.velocity = new Vector3(rb.velocity.x, jumpForce, rb.velocity.z);
+            rb.velocity = new Vector3(rb.velocity.x, jumpForce *Time.deltaTime, rb.velocity.z);
             Debug.Log("Jump");
 
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
@@ -66,6 +66,7 @@ public class PlayerController : MonoBehaviour
         else
         {
             mJumping = false;
+            animator.SetBool("Jumping", false);
         }
 
         if (!IsGrounded())
