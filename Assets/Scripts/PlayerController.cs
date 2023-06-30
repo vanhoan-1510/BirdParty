@@ -17,9 +17,6 @@ public class PlayerController : MonoBehaviour
     float mDesiredRotation = 0f;
     float mDesiredAnimationSpeed = 0f;
     bool mSprinting = false;
-
-    [SerializeField] float mSpeedY = 0f;
-    [SerializeField] float mGravity = -9.81f;
     bool mJumping = false;
 
     [SerializeField] float jumpForce;
@@ -58,7 +55,7 @@ public class PlayerController : MonoBehaviour
             Debug.Log("Jump");
 
             rb.AddForce(Vector3.up * jumpSpeed, ForceMode.VelocityChange);
-            rb.velocity = new Vector3(rb.velocity.x, jumpForce *Time.deltaTime, rb.velocity.z);
+            rb.velocity = new Vector3(rb.velocity.x, jumpForce, rb.velocity.z);
             Debug.Log("Jump");
 
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
@@ -69,34 +66,15 @@ public class PlayerController : MonoBehaviour
             animator.SetBool("Jumping", false);
         }
 
-        if (!IsGrounded())
-        {
-            mSpeedY += mGravity * Time.deltaTime;
-        }
-        else if (mSpeedY < 0f)
-        {
-            mSpeedY = 0f;
-        }
-
-        animator.SetFloat("SpeedY", mSpeedY / jumpSpeed);
-
-        if (mJumping && mSpeedY < 0f)
-        {
-            RaycastHit hit;
-            if (Physics.Raycast(transform.position, Vector3.down, out hit, .5f, LayerMask.GetMask("Ground")))
-            {
-                mJumping = false;
-                animator.SetTrigger("Land");
-            }
-        }
-
         mSprinting = Input.GetKey(KeyCode.LeftShift);
 
         Vector3 movement = new Vector3(horizontalInput, 0, verticalInput).normalized;
         Vector3 rotatedMovement = Quaternion.Euler(0, cam.transform.rotation.eulerAngles.y, 0) * movement;
-        Vector3 verticalMovement = Vector3.up * mSpeedY;
 
-        rb.velocity = (verticalMovement + (rotatedMovement * (mSprinting ? sprintSpeed : moveSpeed)));
+        Vector3 newVelocity = rb.velocity;
+        newVelocity.x = rotatedMovement.x * (mSprinting ? sprintSpeed : moveSpeed);
+        newVelocity.z = rotatedMovement.z * (mSprinting ? sprintSpeed : moveSpeed);
+        rb.velocity = newVelocity;
 
         if (rotatedMovement.magnitude > 0)
         {
