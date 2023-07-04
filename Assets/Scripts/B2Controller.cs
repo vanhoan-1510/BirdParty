@@ -1,14 +1,10 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class B2Controller : MonoBehaviour
 {
     public float rotationSpeed;
-    void Start()
-    {
-        
-    }
 
     // Update is called once per frame
     void Update()

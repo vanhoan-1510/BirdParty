@@ -93,13 +93,7 @@ public class PlayerMovement : MonoBehaviour
 
         //rb.velocity = new Vector3(horizontalInput * moveSpeed, rb.velocity.y, verticalInput * moveSpeed);
 
-        // on ground
-        if (grounded)
-            rb.AddForce(moveDirection.normalized * moveSpeed * 10f, ForceMode.Force);
 
-        // in air
-        else if (!grounded)
-            rb.AddForce(moveDirection.normalized * moveSpeed * 10f * airMultiplier, ForceMode.Force);
     }
 
     private void SpeedControl()
@@ -121,11 +115,18 @@ public class PlayerMovement : MonoBehaviour
 
     private void Jump()
     {
-        // reset y velocity
-        rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+        //rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
         Debug.Log("Jump");
 
-        rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
+        //rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
+
+        // on ground
+        if (grounded)
+            rb.AddForce(moveDirection.normalized * moveSpeed * 10f, ForceMode.Force);
+
+        // in air
+        else if (!grounded)
+            rb.AddForce(moveDirection.normalized * moveSpeed * 10f * airMultiplier, ForceMode.Force);
     }
     private void ResetJump()
     {

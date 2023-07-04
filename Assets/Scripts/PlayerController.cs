@@ -26,6 +26,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField] LayerMask whatIsGround;
     bool grounded;
 
+    [SerializeField] float maxMana = 100f;
+    [SerializeField] float manareduce = 10f;
+    float currentMana;
+
     void Start()
     {
         Cursor.visible = false;
@@ -33,6 +37,8 @@ public class PlayerController : MonoBehaviour
 
         rb = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
+
+        currentMana = maxMana;
     }
 
     void Update()
@@ -41,6 +47,8 @@ public class PlayerController : MonoBehaviour
         grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, whatIsGround);
 
         MyInput();
+
+        Debug.Log("Mana: " + currentMana);
     }
 
     private void MyInput()
@@ -51,7 +59,7 @@ public class PlayerController : MonoBehaviour
         if (Input.GetButtonDown("Jump") && !mJumping && grounded)
         {
             mJumping = true;
-            animator.SetBool("Jumping", true);
+            animator.SetBool("isJumping", true);
             Debug.Log("Jump");
 
             rb.AddForce(Vector3.up * jumpSpeed, ForceMode.VelocityChange);
@@ -63,10 +71,23 @@ public class PlayerController : MonoBehaviour
         else
         {
             mJumping = false;
-            animator.SetBool("Jumping", false);
+            animator.SetBool("isJumping", false);
         }
 
-        mSprinting = Input.GetKey(KeyCode.LeftShift);
+        if (Input.GetKey(KeyCode.LeftShift) && currentMana > 0)
+        {
+            mSprinting = true;
+            currentMana -= 10 * Time.deltaTime;
+
+            if (currentMana < 0)
+            {
+                currentMana = 0;
+            }
+        }
+        else
+        {
+            mSprinting = false;
+        }
 
         Vector3 movement = new Vector3(horizontalInput, 0, verticalInput).normalized;
         Vector3 rotatedMovement = Quaternion.Euler(0, cam.transform.rotation.eulerAngles.y, 0) * movement;
