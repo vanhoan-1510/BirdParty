@@ -2,24 +2,20 @@
 
 public class BounceOnCollision : MonoBehaviour
 {
-    public float bounceForce = 5f;
+    [SerializeField] float bounceForce = 5f; // Lực nảy
+    [SerializeField] LayerMask bounceLayer; // LayerMask của vật thể nảy
+    [SerializeField] float bounceAngle = 45f; // Góc nảy
 
-    private CharacterController characterController;
-
-    private void Start()
+    private void OnCollisionEnter(Collision collision)
     {
-        characterController = GetComponent<CharacterController>();
-    }
-
-    private void OnControllerColliderHit(ControllerColliderHit hit)
-    {
-        Rigidbody otherRigidbody = hit.collider.attachedRigidbody;
-
-        if (otherRigidbody != null)
+        if (bounceLayer == (bounceLayer | (1 << collision.gameObject.layer))) // Kiểm tra xem vật thể va chạm có layer phù hợp hay không
         {
-            // Áp dụng lực nảy lên vào đối tượng va chạm
-            Vector3 bounceDirection = hit.normal;
-            otherRigidbody.AddForce(bounceDirection * bounceForce, ForceMode.Impulse);
+            Rigidbody rb = GetComponent<Rigidbody>();
+
+            // Tính toán hướng nảy dựa trên góc nảy và hướng của nhân vật
+            Vector3 bounceDirection = Quaternion.Euler(0f, -bounceAngle, 0f) * transform.forward;
+
+            rb.AddForce(bounceDirection * bounceForce, ForceMode.VelocityChange);
         }
     }
 }

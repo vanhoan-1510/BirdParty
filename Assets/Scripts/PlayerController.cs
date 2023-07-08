@@ -27,8 +27,18 @@ public class PlayerController : MonoBehaviour
     bool grounded;
 
     [SerializeField] float maxMana = 100f;
-    [SerializeField] float manareduce = 10f;
+    [SerializeField] float manaReduce = 10f;
     float currentMana;
+
+    bool isTouchingRotatingObject = false;
+    bool isCooldown = false;
+    float cooldownTime = 2f;
+    float cooldownTimer = 0f;
+
+    [Header("BouncObject")]
+    [SerializeField] float bounceForce = 5f;
+    [SerializeField] LayerMask bounceLayer;
+    [SerializeField] float bounceAngle = 45f;
 
     void Start()
     {
@@ -49,10 +59,17 @@ public class PlayerController : MonoBehaviour
         MyInput();
 
         Debug.Log("Mana: " + currentMana);
+
+        Die();
     }
 
     private void MyInput()
     {
+        if (isCooldown)
+        {
+            return; // Ngăn chặn di chuyển khi đang trong thời gian cooldown
+        }
+
         float horizontalInput = Input.GetAxis("Horizontal");
         float verticalInput = Input.GetAxis("Vertical");
 
@@ -60,11 +77,10 @@ public class PlayerController : MonoBehaviour
         {
             mJumping = true;
             animator.SetBool("isJumping", true);
-            Debug.Log("Jump");
 
-            rb.AddForce(Vector3.up * jumpSpeed, ForceMode.VelocityChange);
+            //rb.AddForce(Vector3.up * jumpSpeed, ForceMode.VelocityChange);
             rb.velocity = new Vector3(rb.velocity.x, jumpForce, rb.velocity.z);
-            Debug.Log("Jump");
+            Debug.Log("Jump"); 
 
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
         }
@@ -74,10 +90,11 @@ public class PlayerController : MonoBehaviour
             animator.SetBool("isJumping", false);
         }
 
-        if (Input.GetKey(KeyCode.LeftShift) && currentMana > 0)
+        if (Input.GetKey(KeyCode.LeftShift) && (horizontalInput != 0 || verticalInput != 0) && currentMana > 0)
         {
             mSprinting = true;
-            currentMana -= 10 * Time.deltaTime;
+
+            currentMana -= manaReduce * Time.deltaTime;
 
             if (currentMana < 0)
             {
@@ -114,6 +131,22 @@ public class PlayerController : MonoBehaviour
         transform.rotation = Quaternion.Lerp(currentRotation, targetRotation, rotationSpeed * Time.deltaTime);
     }
 
+    private void Die()
+    {
+        // Check if no longer touching the rotating object
+        if (!isTouchingRotatingObject && isCooldown)
+        {
+            cooldownTimer += Time.deltaTime;
+
+            if (cooldownTimer >= cooldownTime)
+            {
+                animator.SetBool("isDying", false);
+                isCooldown = false;
+                cooldownTimer = 0f;
+            }
+        }
+    }
+
     private bool IsGrounded()
     {
         RaycastHit hit;
@@ -123,5 +156,43 @@ public class PlayerController : MonoBehaviour
             return true;
         }
         return false;
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("RotatingObject"))
+        {
+            // Get the direction from the rotating object to the player
+            Vector3 pushDirection = transform.position - collision.transform.position;
+
+            // Set the push direction to be parallel to the ground
+            pushDirection.y = 0f;
+
+            // Apply a force to push the player away from the rotating object
+            rb.AddForce(pushDirection.normalized * 5f, ForceMode.Impulse);
+
+            animator.SetBool("isDying", true);
+            isTouchingRotatingObject = true;
+            isCooldown = true;
+        }
+
+        if (collision.gameObject.CompareTag("BounceGround")) 
+        {
+
+            Vector3 bounceDirection = collision.contacts[0].normal; // Lấy vector pháp tuyến của điểm va chạm
+
+            rb.AddForce(Vector3.ProjectOnPlane(bounceDirection, Vector3.up).normalized * bounceForce, ForceMode.Impulse); // Áp dụng lực nảy theo hướng vuông góc của vật thể
+
+
+        }
+    }
+
+
+    private void OnCollisionExit(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("RotatingObject"))
+        {
+            isTouchingRotatingObject = false;
+        }
     }
 }
