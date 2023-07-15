@@ -169,7 +169,7 @@ public class PlayerController : MonoBehaviour
             pushDirection.y = 0f;
 
             // Apply a force to push the player away from the rotating object
-            rb.AddForce(pushDirection.normalized * 5f, ForceMode.Impulse);
+            rb.AddForce(pushDirection.normalized * 10f, ForceMode.Impulse);
 
             animator.SetBool("isDying", true);
             isTouchingRotatingObject = true;
@@ -179,9 +179,9 @@ public class PlayerController : MonoBehaviour
         if (collision.gameObject.CompareTag("BounceGround")) 
         {
 
-            Vector3 bounceDirection = collision.contacts[0].normal; // Lấy vector pháp tuyến của điểm va chạm
+            Vector3 bounceDirection = collision.contacts[0].normal;
 
-            rb.AddForce(Vector3.ProjectOnPlane(bounceDirection, Vector3.up).normalized * bounceForce, ForceMode.Impulse); // Áp dụng lực nảy theo hướng vuông góc của vật thể
+            rb.AddForce(Vector3.ProjectOnPlane(bounceDirection, Vector3.up).normalized * bounceForce, ForceMode.Impulse);
 
 
         }
