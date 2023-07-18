@@ -80,7 +80,7 @@ public class PlayerController : MonoBehaviour
 
             //rb.AddForce(Vector3.up * jumpSpeed, ForceMode.VelocityChange);
             rb.velocity = new Vector3(rb.velocity.x, jumpForce, rb.velocity.z);
-            Debug.Log("Jump"); 
+            Debug.Log("Jump");
 
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
         }
@@ -160,7 +160,7 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("RotatingObject"))
+        if (collision.gameObject.layer == LayerMask.NameToLayer("RotateTrap"))
         {
             // Get the direction from the rotating object to the player
             Vector3 pushDirection = transform.position - collision.transform.position;
@@ -176,21 +176,25 @@ public class PlayerController : MonoBehaviour
             isCooldown = true;
         }
 
-        if (collision.gameObject.CompareTag("BounceGround")) 
+        if (collision.gameObject.layer == LayerMask.NameToLayer("BounceTrap"))
         {
+            Vector3 surfaceNormal = collision.contacts[0].normal;
 
-            Vector3 bounceDirection = collision.contacts[0].normal;
+            // Calculate the bounce direction by rotating the surface normal by 45 degrees around the world up axis
+            Vector3 bounceDirection = Quaternion.Euler(0f, 0f, 45f) * surfaceNormal;
 
-            rb.AddForce(Vector3.ProjectOnPlane(bounceDirection, Vector3.up).normalized * bounceForce, ForceMode.Impulse);
+            // Apply a force to push the player away from the rotating object
+            rb.AddForce(bounceDirection.normalized * 10f, ForceMode.Impulse);
 
-
+            animator.SetBool("isDying", true);
+            isTouchingRotatingObject = true;
+            isCooldown = true;
         }
     }
 
-
     private void OnCollisionExit(Collision collision)
     {
-        if (collision.gameObject.CompareTag("RotatingObject"))
+        if (collision.gameObject.layer == LayerMask.NameToLayer("RotateTrap"))
         {
             isTouchingRotatingObject = false;
         }
