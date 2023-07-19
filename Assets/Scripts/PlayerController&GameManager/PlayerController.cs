@@ -36,9 +36,10 @@ public class PlayerController : MonoBehaviour
     float cooldownTimer = 0f;
 
     [Header("BouncObject")]
-    [SerializeField] float bounceForce = 5f;
-    [SerializeField] LayerMask bounceLayer;
-    [SerializeField] float bounceAngle = 45f;
+    [SerializeField] private GameObject parentObjLeft;
+    [SerializeField] private GameObject parentObjRight;
+    [SerializeField] private GameObject parentB2Object;
+
 
     void Start()
     {
@@ -58,7 +59,9 @@ public class PlayerController : MonoBehaviour
 
         MyInput();
 
-        Debug.Log("Mana: " + currentMana);
+        //float bounceAngle = inputBounceValueLeft.GetBounceAngle();
+        //Debug.Log("BounceAngle: " + bounceAngle);
+        //Debug.Log("Mana: " + currentMana);
 
         Die();
     }
@@ -80,7 +83,6 @@ public class PlayerController : MonoBehaviour
 
             //rb.AddForce(Vector3.up * jumpSpeed, ForceMode.VelocityChange);
             rb.velocity = new Vector3(rb.velocity.x, jumpForce, rb.velocity.z);
-            Debug.Log("Jump");
 
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
         }
@@ -160,28 +162,48 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.layer == LayerMask.NameToLayer("RotateTrap"))
-        {
-            // Get the direction from the rotating object to the player
-            Vector3 pushDirection = transform.position - collision.transform.position;
+        //if (collision.gameObject.layer == LayerMask.NameToLayer("RotateTrap"))
+        //{
+        //    // Get the direction from the rotating object to the player
+        //    Vector3 pushDirection = transform.position - collision.transform.position;
 
-            // Set the push direction to be parallel to the ground
-            pushDirection.y = 0f;
+        //    // Set the push direction to be parallel to the ground
+        //    pushDirection.y = 0f;
 
-            // Apply a force to push the player away from the rotating object
-            rb.AddForce(pushDirection.normalized * 10f, ForceMode.Impulse);
+        //    // Apply a force to push the player away from the rotating object
+        //    rb.AddForce(pushDirection.normalized * 10f, ForceMode.Impulse);
 
-            animator.SetBool("isDying", true);
-            isTouchingRotatingObject = true;
-            isCooldown = true;
-        }
+        //    animator.SetBool("isDying", true);
+        //    isTouchingRotatingObject = true;
+        //    isCooldown = true;
+        //}
 
         if (collision.gameObject.layer == LayerMask.NameToLayer("BounceTrap"))
         {
+            // Get the surface normal of the contact point between the character and the object it collides with
             Vector3 surfaceNormal = collision.contacts[0].normal;
 
+            Vector3 bounceDirection = Vector3.zero;
+
+            if(IsChildOfParent(collision.gameObject, parentB2Object))
+            {
+                // Get the direction from the rotating object to the player
+                bounceDirection = transform.position - collision.transform.position;
+                bounceDirection.y = 0f;
+            }
+
+            if (IsChildOfParent(collision.gameObject, parentObjLeft))
+            {
+                bounceDirection = Quaternion.Euler(0f, 0f, 45f) * surfaceNormal;
+            }
+
+            if (IsChildOfParent(collision.gameObject, parentObjRight))
+            {
+                bounceDirection = Quaternion.Euler(0f, 0f, -45f) * surfaceNormal;
+            }
+
             // Calculate the bounce direction by rotating the surface normal by 45 degrees around the world up axis
-            Vector3 bounceDirection = Quaternion.Euler(0f, 0f, 45f) * surfaceNormal;
+            //Vector3 bounceDirection = Quaternion.Euler(0f, 0f, bounceValue) * surfaceNormal;
 
             // Apply a force to push the player away from the rotating object
             rb.AddForce(bounceDirection.normalized * 10f, ForceMode.Impulse);
@@ -194,9 +216,23 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionExit(Collision collision)
     {
-        if (collision.gameObject.layer == LayerMask.NameToLayer("RotateTrap"))
+        if (collision.gameObject.layer == LayerMask.NameToLayer("BounceTrap"))
         {
             isTouchingRotatingObject = false;
         }
+    }
+
+    private bool IsChildOfParent(GameObject childObject, GameObject parentObject)
+    {
+        Transform parentTransform = childObject.transform.parent;
+        while (parentTransform != null)
+        {
+            if (parentTransform.gameObject == parentObject)
+            {
+                return true;
+            }
+            parentTransform = parentTransform.parent;
+        }
+        return false;
     }
 }

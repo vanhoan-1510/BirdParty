@@ -7,6 +7,7 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance;
     public PlayerController player;
 
+
     private void Awake()
     {
         DontDestroyOnLoad(this);
