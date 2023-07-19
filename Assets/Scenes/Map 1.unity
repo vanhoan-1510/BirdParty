@@ -269,7 +269,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 196501b99e1fff04288a13ddaf9f5428, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 5
   torqueForce: 2
 --- !u!4 &19522503 stripped
 Transform:
@@ -764,7 +763,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 64543381}
-  m_LocalRotation: {x: 0.16018222, y: -0.000000025470568, z: 0.0000000041333035, w: 0.9870875}
+  m_LocalRotation: {x: 0.16018222, y: 0.000000025470568, z: -0.0000000041333035, w: 0.9870875}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1284,7 +1283,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 196501b99e1fff04288a13ddaf9f5428, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 5
   torqueForce: 2
 --- !u!1 &122504751
 GameObject:
@@ -1432,7 +1430,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a9056acd7b8af24c8a2035b53ea606b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 5
   torqueForce: 2
 --- !u!135 &133977108
 SphereCollider:
@@ -4066,7 +4063,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a9056acd7b8af24c8a2035b53ea606b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 5
   torqueForce: 2
 --- !u!54 &442072409
 Rigidbody:
@@ -5206,7 +5202,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 587955963}
-  m_LocalRotation: {x: 0.14456084, y: -0.000000019035248, z: 0.0000000027809635, w: 0.98949593}
+  m_LocalRotation: {x: 0.14456084, y: 0.00000001903525, z: -0.0000000027809637, w: 0.98949593}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -5926,7 +5922,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 196501b99e1fff04288a13ddaf9f5428, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 5
   torqueForce: 2
 --- !u!54 &658089495
 Rigidbody:
@@ -13143,7 +13138,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a9056acd7b8af24c8a2035b53ea606b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 5
   torqueForce: 2
 --- !u!135 &1061499161
 SphereCollider:
@@ -15016,7 +15010,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1260897348}
-  m_LocalRotation: {x: 0.1289346, y: -0.000000008531382, z: 0.0000000011092491, w: 0.99165314}
+  m_LocalRotation: {x: 0.1289346, y: 0.000000008531381, z: -0.000000001109249, w: 0.99165314}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -17677,7 +17671,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1612917467}
-  m_LocalRotation: {x: 0.14456087, y: -0.00000001903525, z: 0.0000000027809637, w: 0.98949593}
+  m_LocalRotation: {x: 0.14456087, y: 0.000000019035252, z: -0.000000002780964, w: 0.98949593}
   m_LocalPosition: {x: 1.25, y: 1.72, z: 2.77}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -24878,9 +24872,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1912107710533774, guid: 7827fe697fc09eb48b8271115a377d51, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1943216894}
-    - targetCorrespondingSourceObject: {fileID: 1912107710533774, guid: 7827fe697fc09eb48b8271115a377d51, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1943216902}
   m_SourcePrefab: {fileID: 100100000, guid: 7827fe697fc09eb48b8271115a377d51, type: 3}
 --- !u!4 &1943216892 stripped
 Transform:
@@ -24908,7 +24899,6 @@ MonoBehaviour:
   sprintSpeed: 3
   rotationSpeed: 15
   animationBlendSpeed: 2
-  jumpSpeed: 2
   cam: {fileID: 1612917475}
   jumpForce: 2
   playerHeight: 0.1
@@ -24990,18 +24980,6 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.13
   m_Center: {x: 0, y: 0.11, z: 0}
---- !u!114 &1943216902
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1943216893}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 32437447d993e1144aeb2c957bc12392, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1947371393 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 529c84982754857439ea49dcb7f3bf72, type: 3}

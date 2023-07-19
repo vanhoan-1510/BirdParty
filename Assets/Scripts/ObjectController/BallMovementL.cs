@@ -3,7 +3,7 @@
 [RequireComponent(typeof(Rigidbody))]
 public class BallMovementL : MonoBehaviour
 {
-    [SerializeField] private float speed = 5f;
+    //[SerializeField] private float speed = 5f;
     [SerializeField] private float torqueForce = 2f;
 
     private Rigidbody rb;

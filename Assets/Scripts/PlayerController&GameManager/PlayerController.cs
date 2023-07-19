@@ -1,7 +1,5 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 public class PlayerController : MonoBehaviour
 {
@@ -10,7 +8,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float sprintSpeed = 5f;
     [SerializeField] float rotationSpeed = 15f;
     [SerializeField] float animationBlendSpeed = 2f;
-    [SerializeField] float jumpSpeed = 5f;
     [SerializeField] Camera cam;
     Animator animator;
 
@@ -32,14 +29,11 @@ public class PlayerController : MonoBehaviour
 
     bool isTouchingRotatingObject = false;
     bool isCooldown = false;
-    float cooldownTime = 2f;
-    float cooldownTimer = 0f;
 
     [Header("BouncObject")]
     [SerializeField] private GameObject parentObjLeft;
     [SerializeField] private GameObject parentObjRight;
     [SerializeField] private GameObject parentB2Object;
-
 
     void Start()
     {
@@ -54,23 +48,16 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        // ground check
         grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, whatIsGround);
 
         MyInput();
-
-        //float bounceAngle = inputBounceValueLeft.GetBounceAngle();
-        //Debug.Log("BounceAngle: " + bounceAngle);
-        //Debug.Log("Mana: " + currentMana);
-
-        Die();
     }
 
     private void MyInput()
     {
         if (isCooldown)
         {
-            return; // Ngăn chặn di chuyển khi đang trong thời gian cooldown
+            return;
         }
 
         float horizontalInput = Input.GetAxis("Horizontal");
@@ -81,9 +68,7 @@ public class PlayerController : MonoBehaviour
             mJumping = true;
             animator.SetBool("isJumping", true);
 
-            //rb.AddForce(Vector3.up * jumpSpeed, ForceMode.VelocityChange);
             rb.velocity = new Vector3(rb.velocity.x, jumpForce, rb.velocity.z);
-
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
         }
         else
@@ -95,7 +80,6 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKey(KeyCode.LeftShift) && (horizontalInput != 0 || verticalInput != 0) && currentMana > 0)
         {
             mSprinting = true;
-
             currentMana -= manaReduce * Time.deltaTime;
 
             if (currentMana < 0)
@@ -133,61 +117,15 @@ public class PlayerController : MonoBehaviour
         transform.rotation = Quaternion.Lerp(currentRotation, targetRotation, rotationSpeed * Time.deltaTime);
     }
 
-    private void Die()
-    {
-        // Check if no longer touching the rotating object
-        if (!isTouchingRotatingObject && isCooldown)
-        {
-            cooldownTimer += Time.deltaTime;
-
-            if (cooldownTimer >= cooldownTime)
-            {
-                animator.SetBool("isDying", false);
-                isCooldown = false;
-                cooldownTimer = 0f;
-            }
-        }
-    }
-
-    private bool IsGrounded()
-    {
-        RaycastHit hit;
-        float raycastDistance = 0.1f;
-        if (Physics.Raycast(transform.position, Vector3.down, out hit, raycastDistance))
-        {
-            return true;
-        }
-        return false;
-    }
-
     private void OnCollisionEnter(Collision collision)
     {
-        //if (collision.gameObject.layer == LayerMask.NameToLayer("RotateTrap"))
-        //{
-        //    // Get the direction from the rotating object to the player
-        //    Vector3 pushDirection = transform.position - collision.transform.position;
-
-        //    // Set the push direction to be parallel to the ground
-        //    pushDirection.y = 0f;
-
-        //    // Apply a force to push the player away from the rotating object
-        //    rb.AddForce(pushDirection.normalized * 10f, ForceMode.Impulse);
-
-        //    animator.SetBool("isDying", true);
-        //    isTouchingRotatingObject = true;
-        //    isCooldown = true;
-        //}
-
         if (collision.gameObject.layer == LayerMask.NameToLayer("BounceTrap"))
         {
-            // Get the surface normal of the contact point between the character and the object it collides with
             Vector3 surfaceNormal = collision.contacts[0].normal;
-
             Vector3 bounceDirection = Vector3.zero;
 
-            if(IsChildOfParent(collision.gameObject, parentB2Object))
+            if (IsChildOfParent(collision.gameObject, parentB2Object))
             {
-                // Get the direction from the rotating object to the player
                 bounceDirection = transform.position - collision.transform.position;
                 bounceDirection.y = 0f;
             }
@@ -202,13 +140,8 @@ public class PlayerController : MonoBehaviour
                 bounceDirection = Quaternion.Euler(0f, 0f, -45f) * surfaceNormal;
             }
 
-            // Calculate the bounce direction by rotating the surface normal by 45 degrees around the world up axis
-            //Vector3 bounceDirection = Quaternion.Euler(0f, 0f, bounceValue) * surfaceNormal;
-
-            // Apply a force to push the player away from the rotating object
             rb.AddForce(bounceDirection.normalized * 10f, ForceMode.Impulse);
-
-            animator.SetBool("isDying", true);
+            animator.SetBool("isFalling", true);
             isTouchingRotatingObject = true;
             isCooldown = true;
         }
