@@ -1,16 +1,20 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class PlayerController : MonoBehaviour
 {
     Rigidbody rb;
-    [SerializeField] float moveSpeed = 2f;
-    [SerializeField] float sprintSpeed = 5f;
-    [SerializeField] float rotationSpeed = 15f;
-    [SerializeField] float animationBlendSpeed = 2f;
+    [SerializeField] private float moveSpeed = 2f;
+    [SerializeField] private float sprintSpeed = 5f;
+    [SerializeField] private float rotationSpeed = 15f;
+    [SerializeField] private float animationBlendSpeed = 2f;
+    [SerializeField] private float jumpSpeed = 5f;
     [SerializeField] Camera cam;
     Animator animator;
 
+    [Header("Movement")]
     float mDesiredRotation = 0f;
     float mDesiredAnimationSpeed = 0f;
     bool mSprinting = false;
@@ -23,17 +27,27 @@ public class PlayerController : MonoBehaviour
     [SerializeField] LayerMask whatIsGround;
     bool grounded;
 
-    [SerializeField] float maxMana = 100f;
-    [SerializeField] float manaReduce = 10f;
+    [Header("Player Mana")]
+    [SerializeField] private float maxMana = 100f;
+    [SerializeField] private float manaReduce = 10f;
     float currentMana;
 
     bool isTouchingRotatingObject = false;
     bool isCooldown = false;
+    float cooldownTime = 2f;
+    float cooldownTimer = 0f;
 
     [Header("BouncObject")]
     [SerializeField] private GameObject parentObjLeft;
     [SerializeField] private GameObject parentObjRight;
     [SerializeField] private GameObject parentB2Object;
+
+    [Header("Check Point")]
+    [SerializeField] GameObject player;
+    [SerializeField] List<GameObject> checkPointList;
+    Vector3 checkPoint;
+    [SerializeField] float deadPosY;
+
 
     void Start()
     {
@@ -48,9 +62,15 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        // ground check
         grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, whatIsGround);
 
         MyInput();
+
+
+        Falling();
+
+        LoadCheckPoint();
     }
 
     private void MyInput()
@@ -60,6 +80,7 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
+
         float horizontalInput = Input.GetAxis("Horizontal");
         float verticalInput = Input.GetAxis("Vertical");
 
@@ -68,7 +89,9 @@ public class PlayerController : MonoBehaviour
             mJumping = true;
             animator.SetBool("isJumping", true);
 
+            //rb.AddForce(Vector3.up * jumpSpeed, ForceMode.VelocityChange);
             rb.velocity = new Vector3(rb.velocity.x, jumpForce, rb.velocity.z);
+
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
         }
         else
@@ -80,6 +103,7 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKey(KeyCode.LeftShift) && (horizontalInput != 0 || verticalInput != 0) && currentMana > 0)
         {
             mSprinting = true;
+
             currentMana -= manaReduce * Time.deltaTime;
 
             if (currentMana < 0)
@@ -117,15 +141,43 @@ public class PlayerController : MonoBehaviour
         transform.rotation = Quaternion.Lerp(currentRotation, targetRotation, rotationSpeed * Time.deltaTime);
     }
 
+    private void Falling()
+    {
+        // Check if no longer touching the rotating object
+        if (!isTouchingRotatingObject && isCooldown)
+        {
+            cooldownTimer += Time.deltaTime;
+
+            if (cooldownTimer >= cooldownTime)
+            {
+                animator.SetBool("isFalling", false);
+                isCooldown = false;
+                cooldownTimer = 0f;
+            }
+        }
+    }
+
+    private void LoadCheckPoint()
+    {
+        if (player.transform.position.y < deadPosY)
+        {
+            player.transform.position = checkPoint;
+        }
+    }
+
     private void OnCollisionEnter(Collision collision)
     {
+
         if (collision.gameObject.layer == LayerMask.NameToLayer("BounceTrap"))
         {
+            // Get the surface normal of the contact point between the character and the object it collides with
             Vector3 surfaceNormal = collision.contacts[0].normal;
+
             Vector3 bounceDirection = Vector3.zero;
 
             if (IsChildOfParent(collision.gameObject, parentB2Object))
             {
+                // Get the direction from the rotating object to the player
                 bounceDirection = transform.position - collision.transform.position;
                 bounceDirection.y = 0f;
             }
@@ -140,10 +192,21 @@ public class PlayerController : MonoBehaviour
                 bounceDirection = Quaternion.Euler(0f, 0f, -45f) * surfaceNormal;
             }
 
+            // Apply a force to push the player away from the rotating object
             rb.AddForce(bounceDirection.normalized * 10f, ForceMode.Impulse);
+
             animator.SetBool("isFalling", true);
             isTouchingRotatingObject = true;
             isCooldown = true;
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.layer == LayerMask.NameToLayer("CheckPoint"))
+        {
+            checkPoint = other.transform.position;
+            Destroy(other.gameObject);
         }
     }
 
