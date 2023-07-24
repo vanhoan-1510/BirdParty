@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class B5TrapRotation : MonoBehaviour
+public class BFiveTrapRotation : MonoBehaviour
 {
     public float rotationSpeed = 90f;
     public float maxRotation = 80f;

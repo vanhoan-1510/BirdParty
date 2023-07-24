@@ -6,11 +6,10 @@ using UnityEngine.EventSystems;
 public class PlayerController : MonoBehaviour
 {
     Rigidbody rb;
-    [SerializeField] private float moveSpeed = 2f;
-    [SerializeField] private float sprintSpeed = 5f;
+    [SerializeField] private float moveSpeed;
+    [SerializeField] private float sprintSpeed;
     [SerializeField] private float rotationSpeed = 15f;
     [SerializeField] private float animationBlendSpeed = 2f;
-    [SerializeField] private float jumpSpeed = 5f;
     [SerializeField] Camera cam;
     Animator animator;
 
@@ -32,15 +31,16 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float manaReduce = 10f;
     float currentMana;
 
-    bool isTouchingRotatingObject = false;
-    bool isCooldown = false;
-    float cooldownTime = 2f;
-    float cooldownTimer = 0f;
+    public bool isTouchingRotatingObject = false;
+    public bool isCooldown = false;
+    public float cooldownTime = 2f;
+    public float cooldownTimer = 0f;
 
     [Header("BouncObject")]
     [SerializeField] private GameObject parentObjLeft;
     [SerializeField] private GameObject parentObjRight;
     [SerializeField] private GameObject parentB2Object;
+    [SerializeField] private GameObject parentTrampolineObject;
 
     [Header("Check Point")]
     [SerializeField] GameObject player;
@@ -79,7 +79,6 @@ public class PlayerController : MonoBehaviour
         {
             return;
         }
-
 
         float horizontalInput = Input.GetAxis("Horizontal");
         float verticalInput = Input.GetAxis("Vertical");
@@ -141,7 +140,7 @@ public class PlayerController : MonoBehaviour
         transform.rotation = Quaternion.Lerp(currentRotation, targetRotation, rotationSpeed * Time.deltaTime);
     }
 
-    private void Falling()
+    public void Falling()
     {
         // Check if no longer touching the rotating object
         if (!isTouchingRotatingObject && isCooldown)
@@ -175,25 +174,37 @@ public class PlayerController : MonoBehaviour
 
             Vector3 bounceDirection = Vector3.zero;
 
+            float bounceForce = 0f;
+
             if (IsChildOfParent(collision.gameObject, parentB2Object))
             {
                 // Get the direction from the rotating object to the player
                 bounceDirection = transform.position - collision.transform.position;
                 bounceDirection.y = 0f;
+                bounceForce = 10f;
             }
 
             if (IsChildOfParent(collision.gameObject, parentObjLeft))
             {
                 bounceDirection = Quaternion.Euler(0f, 0f, 45f) * surfaceNormal;
+                bounceForce = 10f;
             }
 
             if (IsChildOfParent(collision.gameObject, parentObjRight))
             {
                 bounceDirection = Quaternion.Euler(0f, 0f, -45f) * surfaceNormal;
+                bounceForce = 10f;
+            }
+
+            if (IsChildOfParent(collision.gameObject, parentTrampolineObject))
+            {
+                //bounceDirection = Vector3.back + Vector3.up;
+                bounceDirection = Quaternion.Euler(-45f, 0f, 0f) * surfaceNormal;
+                bounceForce = 20f;
             }
 
             // Apply a force to push the player away from the rotating object
-            rb.AddForce(bounceDirection.normalized * 10f, ForceMode.Impulse);
+            rb.AddForce(bounceDirection.normalized * bounceForce, ForceMode.Impulse);
 
             animator.SetBool("isFalling", true);
             isTouchingRotatingObject = true;

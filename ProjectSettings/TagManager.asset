@@ -19,7 +19,7 @@ TagManager:
   - BounceTrap
   - Ground
   - Wall
-  - RotateTrap
+  - TriggerCamera
   - CheckPoint
   - 
   - 
