@@ -36,15 +36,4 @@ public class TriggerToPlay : MonoBehaviour
             rotateClockwise = !rotateClockwise;
         }
     }
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject == playerObject)
-        {
-            Vector3 direction = GetComponent<Rigidbody>().velocity.normalized;
-
-            float bounceForce = 5f;
-            collision.gameObject.GetComponent<Rigidbody>().AddForce(direction * bounceForce, ForceMode.Impulse);
-        }
-    }
 }

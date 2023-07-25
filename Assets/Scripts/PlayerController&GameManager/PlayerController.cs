@@ -39,8 +39,10 @@ public class PlayerController : MonoBehaviour
     [Header("BouncObject")]
     [SerializeField] private GameObject parentObjLeft;
     [SerializeField] private GameObject parentObjRight;
-    [SerializeField] private GameObject parentB2Object;
+    [SerializeField] private GameObject parentBTwoObject;
     [SerializeField] private GameObject parentTrampolineObject;
+    [SerializeField] private GameObject spindleTrap;
+    [SerializeField] private GameObject parentTrampolineObjectVTwo;
 
     [Header("Check Point")]
     [SerializeField] GameObject player;
@@ -150,7 +152,7 @@ public class PlayerController : MonoBehaviour
             if (cooldownTimer >= cooldownTime)
             {
                 animator.SetBool("isFalling", false);
-                isCooldown = false;
+                isCooldown = true;
                 cooldownTimer = 0f;
             }
         }
@@ -176,7 +178,7 @@ public class PlayerController : MonoBehaviour
 
             float bounceForce = 0f;
 
-            if (IsChildOfParent(collision.gameObject, parentB2Object))
+            if (IsChildOfParent(collision.gameObject, parentBTwoObject))
             {
                 // Get the direction from the rotating object to the player
                 bounceDirection = transform.position - collision.transform.position;
@@ -203,12 +205,32 @@ public class PlayerController : MonoBehaviour
                 bounceForce = 20f;
             }
 
+            if(IsChildOfParent(collision.gameObject, spindleTrap))
+            {
+                bounceDirection = Quaternion.Euler(-45f, 0f, 0f) * surfaceNormal;
+                bounceForce = 20f;
+            }
+
+            if(IsChildOfParent(collision.gameObject, parentTrampolineObjectVTwo))
+            {
+                bounceDirection = Quaternion.Euler(45f, 0f, 0f) * surfaceNormal;
+                bounceForce = 10f;
+            }
+
             // Apply a force to push the player away from the rotating object
             rb.AddForce(bounceDirection.normalized * bounceForce, ForceMode.Impulse);
 
             animator.SetBool("isFalling", true);
             isTouchingRotatingObject = true;
             isCooldown = true;
+        }
+
+        if(collision.gameObject.layer == LayerMask.NameToLayer("Ball"))
+        {
+            animator.SetBool("isFalling", true);
+            isTouchingRotatingObject = true;
+            isCooldown = true;
+            StartCoroutine(WaitToLoadCheckPoint());
         }
     }
 
@@ -227,6 +249,12 @@ public class PlayerController : MonoBehaviour
         {
             isTouchingRotatingObject = false;
         }
+    }
+
+    IEnumerator WaitToLoadCheckPoint()
+    {
+        yield return new WaitForSeconds(2f);
+        player.transform.position = checkPoint;
     }
 
     private bool IsChildOfParent(GameObject childObject, GameObject parentObject)
