@@ -1,10 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 public class PlayerController : MonoBehaviour
 {
+    public static PlayerController Instance;
     Rigidbody rb;
     [SerializeField] private float moveSpeed;
     [SerializeField] private float sprintSpeed;
@@ -33,7 +33,7 @@ public class PlayerController : MonoBehaviour
 
     public bool isTouchingRotatingObject = false;
     public bool isCooldown = false;
-    public float cooldownTime = 2f;
+    public float cooldownTime = 5f;
     public float cooldownTimer = 0f;
 
     [Header("BouncObject")]
@@ -43,6 +43,19 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private GameObject parentTrampolineObject;
     [SerializeField] private GameObject spindleTrap;
     [SerializeField] private GameObject parentTrampolineObjectVTwo;
+    [SerializeField] private GameObject parentGroundBounceRight;
+    [SerializeField] private GameObject parentWeakBounce;
+
+    Vector3 bounceDirection = Vector3.zero;
+    Vector3 surfaceNormal;
+    float bounceForce = 0f;
+
+    //public Transform targetPositionA;
+    //public Transform targetPositionB;
+    //public float bounceSpeed = 5f;
+    //public float flightHeight = 2f;
+    //private bool isMoving = false;
+
 
     [Header("Check Point")]
     [SerializeField] GameObject player;
@@ -152,7 +165,7 @@ public class PlayerController : MonoBehaviour
             if (cooldownTimer >= cooldownTime)
             {
                 animator.SetBool("isFalling", false);
-                isCooldown = true;
+                isCooldown = false;
                 cooldownTimer = 0f;
             }
         }
@@ -172,11 +185,7 @@ public class PlayerController : MonoBehaviour
         if (collision.gameObject.layer == LayerMask.NameToLayer("BounceTrap"))
         {
             // Get the surface normal of the contact point between the character and the object it collides with
-            Vector3 surfaceNormal = collision.contacts[0].normal;
-
-            Vector3 bounceDirection = Vector3.zero;
-
-            float bounceForce = 0f;
+            surfaceNormal = collision.contacts[0].normal;
 
             if (IsChildOfParent(collision.gameObject, parentBTwoObject))
             {
@@ -217,12 +226,28 @@ public class PlayerController : MonoBehaviour
                 bounceForce = 10f;
             }
 
-            // Apply a force to push the player away from the rotating object
-            rb.AddForce(bounceDirection.normalized * bounceForce, ForceMode.Impulse);
+            if(IsChildOfParent(collision.gameObject, parentGroundBounceRight))
+            {
+                bounceDirection = Quaternion.Euler(-45f, 0f, 0f) * surfaceNormal;
+                bounceForce = 10f;
+            }
 
-            animator.SetBool("isFalling", true);
-            isTouchingRotatingObject = true;
-            isCooldown = true;
+            //if (IsChildOfParent(collision.gameObject, parentWeakBounce))
+            //{
+            //    if (!isMoving)
+            //    {
+            //        if (collision.gameObject.CompareTag("WeakBounceLeft"))
+            //        {
+            //            StartCoroutine(BounceToTarget(targetPositionB.position));
+            //        }
+            //        else if (collision.gameObject.CompareTag("WeakBounceRight"))
+            //        {
+            //            StartCoroutine(BounceToTarget(targetPositionA.position));
+            //        }
+            //    }
+            //}
+
+            AddForceToPlayer();
         }
 
         if(collision.gameObject.layer == LayerMask.NameToLayer("Ball"))
@@ -233,6 +258,8 @@ public class PlayerController : MonoBehaviour
             StartCoroutine(WaitToLoadCheckPoint());
         }
     }
+
+
 
     private void OnTriggerEnter(Collider other)
     {
@@ -249,6 +276,17 @@ public class PlayerController : MonoBehaviour
         {
             isTouchingRotatingObject = false;
         }
+    }
+
+    public void AddForceToPlayer()
+    {
+
+        // Apply a force to push the player away from the rotating object
+        rb.AddForce(bounceDirection.normalized * bounceForce, ForceMode.Impulse);
+
+        animator.SetBool("isFalling", true);
+        isTouchingRotatingObject = true;
+        isCooldown = true;
     }
 
     IEnumerator WaitToLoadCheckPoint()
@@ -270,4 +308,28 @@ public class PlayerController : MonoBehaviour
         }
         return false;
     }
+
+    //private IEnumerator BounceToTarget(Vector3 targetPosition)
+    //{
+    //    isMoving = true;
+            
+    //    Vector3 startPosition = transform.position;
+    //    float startTime = Time.time;
+
+    //    while (transform.position != targetPosition)
+    //    {
+    //        float journeyLength = Vector3.Distance(startPosition, targetPosition);
+    //        float distanceCovered = (Time.time - startTime) * moveSpeed;
+    //        float fractionOfJourney = distanceCovered / journeyLength;
+
+    //        Vector3 currentPosition = Vector3.Lerp(startPosition, targetPosition, fractionOfJourney);
+    //        currentPosition.y += Mathf.Sin(fractionOfJourney * Mathf.PI) * flightHeight;
+
+    //        transform.position = currentPosition;
+
+    //        yield return null;
+    //    }
+
+    //    isMoving = false;
+    //}
 }

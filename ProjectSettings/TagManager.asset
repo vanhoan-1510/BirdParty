@@ -6,6 +6,8 @@ TagManager:
   tags:
   - RotatingObject
   - BounceGround
+  - WeakBounceLeft
+  - WeakBounceRight
   layers:
   - Default
   - TransparentFX
@@ -15,7 +17,7 @@ TagManager:
   - UI
   - Ball
   - 
-  - 
+  - TrampolineTrap
   - BounceTrap
   - Ground
   - Wall
