@@ -27,7 +27,7 @@ public class PlayerController : MonoBehaviour
     bool grounded;
 
     [Header("Player Mana")]
-    [SerializeField] private float maxMana = 100f;
+    [SerializeField] private float maxMana = 10000f;
     [SerializeField] private float manaReduce = 10f;
     float currentMana;
 
@@ -45,17 +45,11 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private GameObject parentTrampolineObjectVTwo;
     [SerializeField] private GameObject parentGroundBounceRight;
     [SerializeField] private GameObject parentWeakBounce;
+    [SerializeField] private GameObject parentDeathObject;
 
     Vector3 bounceDirection = Vector3.zero;
     Vector3 surfaceNormal;
     float bounceForce = 0f;
-
-    //public Transform targetPositionA;
-    //public Transform targetPositionB;
-    //public float bounceSpeed = 5f;
-    //public float flightHeight = 2f;
-    //private bool isMoving = false;
-
 
     [Header("Check Point")]
     [SerializeField] GameObject player;
@@ -78,7 +72,7 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         // ground check
-        grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, whatIsGround);
+        grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f, whatIsGround);
 
         MyInput();
 
@@ -171,12 +165,18 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void LoadCheckPoint()
+    public void LoadCheckPoint()
     {
         if (player.transform.position.y < deadPosY)
         {
             player.transform.position = checkPoint;
         }
+    }
+
+    private IEnumerator WaitToLoadCheckPoint(float timeLoad)
+    {
+        yield return new WaitForSeconds(timeLoad);
+        player.transform.position = checkPoint;
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -232,20 +232,11 @@ public class PlayerController : MonoBehaviour
                 bounceForce = 10f;
             }
 
-            //if (IsChildOfParent(collision.gameObject, parentWeakBounce))
-            //{
-            //    if (!isMoving)
-            //    {
-            //        if (collision.gameObject.CompareTag("WeakBounceLeft"))
-            //        {
-            //            StartCoroutine(BounceToTarget(targetPositionB.position));
-            //        }
-            //        else if (collision.gameObject.CompareTag("WeakBounceRight"))
-            //        {
-            //            StartCoroutine(BounceToTarget(targetPositionA.position));
-            //        }
-            //    }
-            //}
+            if (IsChildOfParent(collision.gameObject, parentDeathObject))
+            {
+                //load checkpoint
+                player.transform.position = checkPoint;
+            }
 
             AddForceToPlayer();
         }
@@ -255,11 +246,9 @@ public class PlayerController : MonoBehaviour
             animator.SetBool("isFalling", true);
             isTouchingRotatingObject = true;
             isCooldown = true;
-            StartCoroutine(WaitToLoadCheckPoint());
+            StartCoroutine(WaitToLoadCheckPoint(2f));
         }
     }
-
-
 
     private void OnTriggerEnter(Collider other)
     {
@@ -289,12 +278,6 @@ public class PlayerController : MonoBehaviour
         isCooldown = true;
     }
 
-    IEnumerator WaitToLoadCheckPoint()
-    {
-        yield return new WaitForSeconds(2f);
-        player.transform.position = checkPoint;
-    }
-
     private bool IsChildOfParent(GameObject childObject, GameObject parentObject)
     {
         Transform parentTransform = childObject.transform.parent;
@@ -308,28 +291,4 @@ public class PlayerController : MonoBehaviour
         }
         return false;
     }
-
-    //private IEnumerator BounceToTarget(Vector3 targetPosition)
-    //{
-    //    isMoving = true;
-            
-    //    Vector3 startPosition = transform.position;
-    //    float startTime = Time.time;
-
-    //    while (transform.position != targetPosition)
-    //    {
-    //        float journeyLength = Vector3.Distance(startPosition, targetPosition);
-    //        float distanceCovered = (Time.time - startTime) * moveSpeed;
-    //        float fractionOfJourney = distanceCovered / journeyLength;
-
-    //        Vector3 currentPosition = Vector3.Lerp(startPosition, targetPosition, fractionOfJourney);
-    //        currentPosition.y += Mathf.Sin(fractionOfJourney * Mathf.PI) * flightHeight;
-
-    //        transform.position = currentPosition;
-
-    //        yield return null;
-    //    }
-
-    //    isMoving = false;
-    //}
 }

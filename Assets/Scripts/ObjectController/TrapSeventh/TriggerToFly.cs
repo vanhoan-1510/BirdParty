@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class ObjectInteraction : MonoBehaviour
+public class TriggerToFly : MonoBehaviour
 {
     public Transform objectA;
     public float moveSpeed = 5f;
@@ -16,6 +16,7 @@ public class ObjectInteraction : MonoBehaviour
         {
             targetPosition = objectA.position;
             StartCoroutine(MoveToTargetPosition(other.transform));
+            WaitToRespawn();
         }
     }
 
@@ -41,5 +42,10 @@ public class ObjectInteraction : MonoBehaviour
         playerTransform.position = targetPosition;
         isMoving = false;
     }
-
+    
+    private IEnumerator WaitToRespawn()
+    {
+        yield return new WaitForSeconds(5f);
+        PlayerController.Instance.LoadCheckPoint();
+    }
 }
