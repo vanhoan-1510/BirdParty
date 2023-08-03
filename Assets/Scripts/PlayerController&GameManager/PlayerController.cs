@@ -1,16 +1,16 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
 public class PlayerController : MonoBehaviour
 {
     public static PlayerController Instance;
     Rigidbody rb;
-    [SerializeField] private float moveSpeed;
-    [SerializeField] private float sprintSpeed;
-    [SerializeField] private float rotationSpeed = 15f;
-    [SerializeField] private float animationBlendSpeed = 2f;
-    [SerializeField] Camera cam;
+    private float moveSpeed = 1.5f;
+    private float sprintSpeed = 2.1f;
+    private float rotationSpeed = 15f;
+    private float animationBlendSpeed = 2f;
+    Camera cam;
     Animator animator;
 
     [Header("Movement")]
@@ -19,52 +19,68 @@ public class PlayerController : MonoBehaviour
     bool mSprinting = false;
     bool mJumping = false;
 
-    [SerializeField] float jumpForce;
+    float jumpForce = 2f;
 
     [Header("Ground Check")]
-    [SerializeField] float playerHeight;
-    [SerializeField] LayerMask whatIsGround;
+    float playerHeight = .1f;
     bool grounded;
+    LayerMask whatIsGround;
 
     [Header("Player Mana")]
-    [SerializeField] private float maxMana = 10000f;
-    [SerializeField] private float manaReduce = 10f;
+    private float maxMana = 10000100f;
+    private float manaReduce = 10f;
     float currentMana;
 
-    public bool isTouchingRotatingObject = false;
-    public bool isCooldown = false;
-    public float cooldownTime = 5f;
-    public float cooldownTimer = 0f;
+    bool isTouchingRotatingObject = false;
+    bool isCooldown = false;
+    float cooldownTime = 5f;
+    float cooldownTimer = 0f;
 
-    [Header("BouncObject")]
-    [SerializeField] private GameObject parentObjLeft;
-    [SerializeField] private GameObject parentObjRight;
-    [SerializeField] private GameObject parentBTwoObject;
-    [SerializeField] private GameObject parentTrampolineObject;
-    [SerializeField] private GameObject spindleTrap;
-    [SerializeField] private GameObject parentTrampolineObjectVTwo;
-    [SerializeField] private GameObject parentGroundBounceRight;
-    [SerializeField] private GameObject parentWeakBounce;
-    [SerializeField] private GameObject parentDeathObject;
+    [Header("BounceObject")]
+    private GameObject parentObjLeft;
+    private GameObject parentObjRight;
+    private GameObject parentBTwoObject;
+    private GameObject parentTrampolineObject;
+    private GameObject spindleTrap;
+    private GameObject parentTrampolineObjectVTwo;
+    private GameObject parentGroundBounceRight;
+    private GameObject parentDeathObject;
 
     Vector3 bounceDirection = Vector3.zero;
     Vector3 surfaceNormal;
     float bounceForce = 0f;
 
     [Header("Check Point")]
-    [SerializeField] GameObject player;
-    [SerializeField] List<GameObject> checkPointList;
+    public GameObject player;
     Vector3 checkPoint;
-    [SerializeField] float deadPosY;
+    float deadPosY = -20f;
 
+    PhotonView photonView;
 
-    void Start()
+    private void Awake()
     {
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
 
         rb = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
+        photonView = GetComponent<PhotonView>();
+    }
+
+    void Start()
+    {
+        cam = GameManager.Instance.cam;
+
+        whatIsGround = LayerMask.GetMask("Ground");
+
+        parentObjLeft = GameManager.Instance.parentObjLeft;
+        parentObjRight = GameManager.Instance.parentObjRight;
+        parentBTwoObject = GameManager.Instance.parentBTwoObject;
+        parentTrampolineObject = GameManager.Instance.parentTrampolineObject;
+        spindleTrap = GameManager.Instance.spindleTrap;
+        parentTrampolineObjectVTwo = GameManager.Instance.parentTrampolineObjectVTwo;
+        parentGroundBounceRight = GameManager.Instance.parentGroundBounceRight;
+        parentDeathObject = GameManager.Instance.parentDeathObject;
 
         currentMana = maxMana;
     }
@@ -74,12 +90,14 @@ public class PlayerController : MonoBehaviour
         // ground check
         grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f, whatIsGround);
 
-        MyInput();
+        if (photonView.IsMine)
+        {
+            MyInput();
 
+            Falling();
 
-        Falling();
-
-        LoadCheckPoint();
+            LoadCheckPoint();
+        }
     }
 
     private void MyInput()

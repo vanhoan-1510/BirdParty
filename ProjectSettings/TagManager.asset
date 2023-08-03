@@ -6,6 +6,7 @@ TagManager:
   tags:
   - RotatingObject
   - WeakBounce
+  - CinemachineCamera
   layers:
   - Default
   - TransparentFX
