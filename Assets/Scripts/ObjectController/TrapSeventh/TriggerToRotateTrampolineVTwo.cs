@@ -10,9 +10,12 @@ public class TriggerToRotateTrampolineVTwo : MonoBehaviour
     private Quaternion defaultQuaternion;
     [SerializeField] private GameObject trap;
 
+    private GameObject player;
+
 
     private void Start()
     {
+        player = GameObject.FindGameObjectWithTag("Player");
         targetQuaternion = Quaternion.Euler(transform.eulerAngles + Vector3.forward * 15f);
         defaultQuaternion = Quaternion.Euler(transform.eulerAngles);
         trap.SetActive(false);
@@ -31,7 +34,7 @@ public class TriggerToRotateTrampolineVTwo : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject == GameManager.Instance.playerObject)
+        if (collision.gameObject == player)
         {
             isRotated = true;
             trap.SetActive(true);
@@ -40,7 +43,7 @@ public class TriggerToRotateTrampolineVTwo : MonoBehaviour
 
     private void OnCollisionExit(Collision collision)
     {
-        if (collision.gameObject == GameManager.Instance.playerObject)
+        if (collision.gameObject == player)
         {
             StartCoroutine(WaitToRotateBack());
         }

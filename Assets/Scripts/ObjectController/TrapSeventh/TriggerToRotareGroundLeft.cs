@@ -6,13 +6,12 @@ public class TriggerToRotareGroundLeft : MonoBehaviour
 
     private bool isRotated = false;
     private Quaternion targetQuaternion;
-    private GameObject playerObject;
+    private GameObject player;
 
 
     private void Start()
     {
-        playerObject = GameManager.Instance.playerObject;
-
+        player = GameObject.FindGameObjectWithTag("Player");
         targetQuaternion = Quaternion.Euler(transform.eulerAngles + Vector3.forward * 80f);
     }
     private void Update()
@@ -25,7 +24,7 @@ public class TriggerToRotareGroundLeft : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject == playerObject)
+        if (other.gameObject == player)
         {
             isRotated = true; ;
         }

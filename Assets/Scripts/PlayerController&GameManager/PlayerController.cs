@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using UnityEngine;
 using Photon.Pun;
+using Photon.Realtime;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : MonoBehaviourPunCallbacks
 {
     public static PlayerController Instance;
     Rigidbody rb;
@@ -52,19 +53,19 @@ public class PlayerController : MonoBehaviour
 
     [Header("Check Point")]
     public GameObject player;
-    Vector3 checkPoint;
-    float deadPosY = -20f;
+    //public Vector3 checkPoint;
+    //float deadPosY = -20f;
+    private Vector3 lastCheckpointPosition;
 
-    PhotonView photonView;
 
     private void Awake()
     {
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
 
+        player = this.gameObject;
         rb = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
-        photonView = GetComponent<PhotonView>();
     }
 
     void Start()
@@ -96,7 +97,7 @@ public class PlayerController : MonoBehaviour
 
             Falling();
 
-            LoadCheckPoint();
+            RespawnAtLastCheckpoint();
         }
     }
 
@@ -166,7 +167,7 @@ public class PlayerController : MonoBehaviour
         Quaternion targetRotation = Quaternion.Euler(0, mDesiredRotation, 0);
         transform.rotation = Quaternion.Lerp(currentRotation, targetRotation, rotationSpeed * Time.deltaTime);
     }
-
+        
     public void Falling()
     {
         // Check if no longer touching the rotating object
@@ -183,18 +184,28 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void LoadCheckPoint()
+    [PunRPC]
+    public void SaveCheckpoint(Vector3 checkpointPosition)
     {
-        if (player.transform.position.y < deadPosY)
+        // Save the checkpoint position for the player
+        lastCheckpointPosition = checkpointPosition;
+        Debug.Log("Checkpoint saved for player: " + photonView.Owner.NickName);
+    }
+
+    public void RespawnAtLastCheckpoint()
+    {
+        if (transform.position.y < -20f)
         {
-            player.transform.position = checkPoint;
+            player.transform.position = lastCheckpointPosition;
+            Debug.Log("Player respawned at last checkpoint: " + photonView.Owner.NickName);
         }
     }
 
     private IEnumerator WaitToLoadCheckPoint(float timeLoad)
     {
         yield return new WaitForSeconds(timeLoad);
-        player.transform.position = checkPoint;
+        player.transform.position = lastCheckpointPosition;
+        isTouchingRotatingObject = false;
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -253,7 +264,7 @@ public class PlayerController : MonoBehaviour
             if (IsChildOfParent(collision.gameObject, parentDeathObject))
             {
                 //load checkpoint
-                player.transform.position = checkPoint;
+                StartCoroutine(WaitToLoadCheckPoint(1f));
             }
 
             AddForceToPlayer();
@@ -265,15 +276,6 @@ public class PlayerController : MonoBehaviour
             isTouchingRotatingObject = true;
             isCooldown = true;
             StartCoroutine(WaitToLoadCheckPoint(2f));
-        }
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject.layer == LayerMask.NameToLayer("CheckPoint"))
-        {
-            checkPoint = other.transform.position;
-            Destroy(other.gameObject);
         }
     }
 

@@ -5,16 +5,17 @@ public class AutoMoveUpDown : MonoBehaviour
     [SerializeField] private float moveSpeed = 2f;
     [SerializeField] private float maxHeight = 5f;
     [SerializeField] private float minHeight = 1f;
-    private GameObject playerObject;
     private bool isColliding = false;
 
     private Vector3 initialPosition;
     private bool movingUp = true;
 
+    GameObject player;
+
     private void Start()
     {
+        player = GameObject.FindGameObjectWithTag("Player");
         initialPosition = transform.position;
-        playerObject = GameManager.Instance.playerObject;
     }
 
     private void Update()
@@ -48,7 +49,7 @@ public class AutoMoveUpDown : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject == playerObject)
+        if (collision.gameObject == player)
         {
             transform.Translate(Vector3.down * moveSpeed * Time.deltaTime);
             isColliding = true;
@@ -57,7 +58,7 @@ public class AutoMoveUpDown : MonoBehaviour
 
     private void OnCollisionExit(Collision collision)
     {
-        if (collision.gameObject == playerObject)
+        if (collision.gameObject == player)
         {
             movingUp = true;
         }

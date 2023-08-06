@@ -1,23 +1,21 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class TriggerToMove : MonoBehaviour
 {
     [SerializeField] private Transform targetObject;
     [SerializeField] private float moveSpeed = 5f;
-    private GameObject playerObject;
+    private GameObject player;
 
     private bool isMoving = false;
 
     private void Start()
     {
-        playerObject = GameManager.Instance.playerObject;
+        player = GameObject.FindGameObjectWithTag("Player");
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject == playerObject)
+        if (other.gameObject == player)
         {
             isMoving = true;
         }

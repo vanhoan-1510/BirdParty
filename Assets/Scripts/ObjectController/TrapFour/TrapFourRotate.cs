@@ -3,32 +3,29 @@ using UnityEngine;
 
 public class TrapFourRotate : MonoBehaviour
 {
-    private PlayerController player;
-    private GameObject playerObject;
-
     [SerializeField] private int numberOfRotations = 3;
-    [SerializeField] private float rotationSpeed = 90f;
+    [SerializeField] private float rotationSpeed = 180f;
+    private GameObject player;
 
-
+    private bool isRotating = false;
 
     private void Start()
     {
-        playerObject = GameManager.Instance.playerObject;
-        player = GameManager.Instance.player;
+        player = GameObject.FindGameObjectWithTag("Player");
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject == playerObject)
+        if (other.gameObject == player && !isRotating)
         {
             //PlayerController.Instance.Falling();
+            isRotating = true;
             StartCoroutine(RotateForNumberOfTimes());
         }
     }
 
     private IEnumerator RotateForNumberOfTimes()
     {
-
         float totalRotation = 360f * numberOfRotations;
         float currentRotation = 0f;
 
@@ -40,5 +37,7 @@ public class TrapFourRotate : MonoBehaviour
 
             yield return null;
         }
+
+        isRotating = false;
     }
 }

@@ -1,23 +1,22 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class TriggerAndWaitToMove : MonoBehaviour
 {
     [SerializeField] private Transform targetObject;
     [SerializeField] private float moveSpeed = 5f;
-    private GameObject playerObject;
 
     private bool isMoving = false;
+    private GameObject player;
 
     private void Start()
     {
-        playerObject = GameManager.Instance.playerObject;       
-    }
+        player = GameObject.FindGameObjectWithTag("Player");
+;    }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject == playerObject)
+        if (other.gameObject == player)
         {
             StartCoroutine(WaitToMove(1f));
         }

@@ -4,7 +4,7 @@
 public class BallMovementL : MonoBehaviour
 {
     //[SerializeField] private float speed = 5f;
-    [SerializeField] private float torqueForce = 2f;
+    [SerializeField] private float torqueForce = 5f;
 
     private Rigidbody rb;
 

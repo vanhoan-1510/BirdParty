@@ -1,21 +1,19 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class isTriggerWithEmptyObject : MonoBehaviour
 {
-    private GameObject playerObject;
     public GameObject trap;
+    public GameObject player;
 
     private void Start()
     {
-        playerObject = GameManager.Instance.playerObject;
         trap.SetActive(false);
+        player = GameObject.FindGameObjectWithTag("Player");
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject == playerObject)
+        if (other.gameObject == player)
         {
             trap.SetActive(true);
         }

@@ -4,7 +4,6 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
     public PlayerController player;
-    public GameObject playerObject;
     public Camera cam;
 
     [Header("BounceObject")]
@@ -19,7 +18,6 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-        playerObject = GameObject.FindGameObjectWithTag("Player");
         DontDestroyOnLoad(this);
         if (!Instance) //if (Instance == null)
         {

@@ -1,7 +1,8 @@
+using Photon.Pun;
 using System.Collections;
 using UnityEngine;
 
-public class TriggerToFly : MonoBehaviour
+public class TriggerToFly : MonoBehaviourPunCallbacks
 {
     public Transform objectA;
     public float moveSpeed = 5f;
@@ -9,16 +10,38 @@ public class TriggerToFly : MonoBehaviour
 
     private bool isMoving = false;
     private Vector3 targetPosition;
+    private GameObject player;
+    private int count = 0;
+    public GameObject moveObject;
+    public Transform secondMoveObjectTransform;
+    public Transform thirdMoveObjectTransform;
+
+
+    private void Start()
+    {
+        player = GameObject.FindGameObjectWithTag("Player");
+    }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player") && !isMoving)
+        if (other.gameObject == player && !isMoving)
         {
             targetPosition = objectA.position;
             StartCoroutine(MoveToTargetPosition(other.transform));
-            WaitToRespawn();
+            count++;
         }
     }
+
+    private void Update()
+    {
+        if (count >= 4)
+        {
+            moveObject.transform.position = secondMoveObjectTransform.position;
+            StartCoroutine(MoveObjectBack());
+        }
+        Debug.Log(count);
+    }
+
 
     private IEnumerator MoveToTargetPosition(Transform playerTransform)
     {
@@ -42,10 +65,11 @@ public class TriggerToFly : MonoBehaviour
         playerTransform.position = targetPosition;
         isMoving = false;
     }
-    
-    private IEnumerator WaitToRespawn()
+
+    private IEnumerator MoveObjectBack()
     {
-        yield return new WaitForSeconds(5f);
-        PlayerController.Instance.LoadCheckPoint();
+        yield return new WaitForSeconds(2f);
+        moveObject.transform.position = thirdMoveObjectTransform.position;
+        count = 0;
     }
 }

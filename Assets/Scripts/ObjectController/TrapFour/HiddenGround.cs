@@ -1,23 +1,21 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class HiddenGround : MonoBehaviour
 {
     private MeshCollider meshCollider;
-    private GameObject playerObject;
     private MeshRenderer meshRenderer;
+    private GameObject player;
 
     private void Start()
     {
-        playerObject = GameManager.Instance.playerObject;
         meshCollider = GetComponent<MeshCollider>();
         meshRenderer = GetComponent<MeshRenderer>();
+        player = GameObject.FindGameObjectWithTag("Player");
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject == playerObject)
+        if (other.gameObject == player)
         {
 
             meshRenderer.enabled = false;
@@ -29,7 +27,7 @@ public class HiddenGround : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.gameObject == playerObject)
+        if (other.gameObject == player)
         {
 
             meshRenderer.enabled = true;

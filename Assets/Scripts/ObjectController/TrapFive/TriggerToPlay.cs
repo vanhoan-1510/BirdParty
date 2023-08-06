@@ -7,12 +7,6 @@ public class TriggerToPlay : MonoBehaviour
 
     [SerializeField] private float currentRotation;
     private bool rotateClockwise = true;
-    private GameObject playerObject;
-
-    private void Start()
-    {
-        playerObject = GameManager.Instance.playerObject;
-    }
 
     private void Update()
     {

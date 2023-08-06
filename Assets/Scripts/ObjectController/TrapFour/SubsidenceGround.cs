@@ -1,22 +1,21 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class SubsidenceGround : MonoBehaviour
 {
     private MeshCollider meshCollider;
-    private GameObject playerObject;
     public Transform targetPosition;
     private Vector3 objPos;
+    private GameObject player;
 
     private bool isMeshTrigger = false;
     private bool isMovingBack = false;
 
     private void Start()
     {
-        playerObject = GameManager.Instance.playerObject;
         meshCollider = GetComponent<MeshCollider>();
         objPos = transform.position;
+        player = GameObject.FindGameObjectWithTag("Player");
     }
 
     private void Update()
@@ -30,7 +29,7 @@ public class SubsidenceGround : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject == playerObject)
+        if (other.gameObject == player)
         {
             // Activate the trigger and stop moving back to the original position if the object is currently moving back
             isMeshTrigger = true;
@@ -43,7 +42,7 @@ public class SubsidenceGround : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.gameObject == playerObject)
+        if (other.gameObject == player)
         {
             // Deactivate the trigger and start moving the object back to the original position
             isMeshTrigger = false;
