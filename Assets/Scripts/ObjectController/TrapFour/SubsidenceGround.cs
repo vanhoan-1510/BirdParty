@@ -6,7 +6,6 @@ public class SubsidenceGround : MonoBehaviour
     private MeshCollider meshCollider;
     public Transform targetPosition;
     private Vector3 objPos;
-    private GameObject player;
 
     private bool isMeshTrigger = false;
     private bool isMovingBack = false;
@@ -15,7 +14,6 @@ public class SubsidenceGround : MonoBehaviour
     {
         meshCollider = GetComponent<MeshCollider>();
         objPos = transform.position;
-        player = GameObject.FindGameObjectWithTag("Player");
     }
 
     private void Update()
@@ -29,7 +27,7 @@ public class SubsidenceGround : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject == player)
+        if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
             // Activate the trigger and stop moving back to the original position if the object is currently moving back
             isMeshTrigger = true;
@@ -42,7 +40,7 @@ public class SubsidenceGround : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.gameObject == player)
+        if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
             // Deactivate the trigger and start moving the object back to the original position
             isMeshTrigger = false;

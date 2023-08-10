@@ -5,18 +5,12 @@ public class TrapFourRotate : MonoBehaviour
 {
     [SerializeField] private int numberOfRotations = 3;
     [SerializeField] private float rotationSpeed = 180f;
-    private GameObject player;
 
     private bool isRotating = false;
 
-    private void Start()
-    {
-        player = GameObject.FindGameObjectWithTag("Player");
-    }
-
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject == player && !isRotating)
+        if (other.gameObject.layer == LayerMask.NameToLayer("Player") && !isRotating)
         {
             //PlayerController.Instance.Falling();
             isRotating = true;

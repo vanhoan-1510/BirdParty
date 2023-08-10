@@ -6,11 +6,9 @@ public class TriggerToRotareGroundRight : MonoBehaviour
 
     private bool isRotated = false;
     private Quaternion targetQuaternion;
-    private GameObject player;
 
     private void Start()
     {
-        player = GameObject.FindGameObjectWithTag("Player");
         targetQuaternion = Quaternion.Euler(transform.eulerAngles + Vector3.forward * -80f);
     }
     private void Update()
@@ -23,7 +21,7 @@ public class TriggerToRotareGroundRight : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject == player)
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
             isRotated = true;;
         }

@@ -23,6 +23,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     public Transform playerItemParent;
 
     public GameObject startGameButton;
+    public GameObject hostRoomItem;
 
     private void Start()
     {
@@ -131,15 +132,17 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         if (PhotonNetwork.IsMasterClient && PhotonNetwork.CurrentRoom.PlayerCount >= 2)
         {
             startGameButton.SetActive(true);
+            hostRoomItem.SetActive(true);
         }
         else
         {
             startGameButton.SetActive(false);
+            hostRoomItem.SetActive(false);
         }
     }
 
     public void OnClickStartGame()
     {
-        PhotonNetwork.LoadLevel("Level1");
+        PhotonNetwork.LoadLevel("Coop");
     }
 }

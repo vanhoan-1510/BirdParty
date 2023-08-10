@@ -5,17 +5,15 @@ using UnityEngine;
 public class TriggerToAppear : MonoBehaviour
 {
     public GameObject objectIsInActive;
-    private GameObject player;
 
     private void Start()
     {
-        player = GameObject.FindGameObjectWithTag("Player");
         objectIsInActive.SetActive(false);
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject == player)
+        if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
             objectIsInActive.SetActive(true);
         }

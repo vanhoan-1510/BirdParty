@@ -5,6 +5,8 @@ using Photon.Realtime;
 
 public class PlayerItem : MonoBehaviourPunCallbacks
 {
+    public static PlayerItem Instance;
+
     public Text playerName;
 
     Image backgroundImage;
@@ -17,6 +19,7 @@ public class PlayerItem : MonoBehaviourPunCallbacks
     public Sprite[] avatars;
 
     Player player;
+    public GameObject hostRoomItem;
 
     private void Awake()
     {

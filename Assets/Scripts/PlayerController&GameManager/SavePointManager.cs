@@ -28,7 +28,7 @@ public class SavePointManager : MonoBehaviourPun
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
             // Get the PhotonView ID of the player who triggered the checkpoint
             int playerID = other.GetComponent<PhotonView>().ViewID;
@@ -54,7 +54,7 @@ public class SavePointManager : MonoBehaviourPun
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
             // Remove the PhotonView ID of the player who exited the checkpoint trigger
             int playerID = other.GetComponent<PhotonView>().ViewID;

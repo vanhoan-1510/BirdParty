@@ -12,6 +12,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Lobby.unity
     guid: 11fb64befb737304889d2f6ff951f166
   - enabled: 1
-    path: Assets/Scenes/Level1.unity
+    path: Assets/Scenes/Coop.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
+  - enabled: 1
+    path: Assets/Scenes/Solo.unity
+    guid: d3bae8035081cf14abe28bf294992cca
   m_configObjects: {}

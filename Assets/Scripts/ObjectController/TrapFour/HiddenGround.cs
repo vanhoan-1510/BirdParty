@@ -4,18 +4,16 @@ public class HiddenGround : MonoBehaviour
 {
     private MeshCollider meshCollider;
     private MeshRenderer meshRenderer;
-    private GameObject player;
 
     private void Start()
     {
         meshCollider = GetComponent<MeshCollider>();
         meshRenderer = GetComponent<MeshRenderer>();
-        player = GameObject.FindGameObjectWithTag("Player");
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject == player)
+        if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
 
             meshRenderer.enabled = false;
@@ -27,7 +25,7 @@ public class HiddenGround : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.gameObject == player)
+        if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
 
             meshRenderer.enabled = true;

@@ -10,11 +10,11 @@ public class GameManager : MonoBehaviour
     public GameObject parentObjLeft;
     public GameObject parentObjRight;
     public GameObject parentBTwoObject;
-    public GameObject parentTrampolineObject;
     public GameObject spindleTrap;
     public GameObject parentTrampolineObjectVTwo;
     public GameObject parentGroundBounceRight;
     public GameObject parentDeathObject;
+    public PowerBar powerBar;
 
     private void Awake()
     {

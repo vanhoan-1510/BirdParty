@@ -7,16 +7,11 @@ public class TriggerAndWaitToMove : MonoBehaviour
     [SerializeField] private float moveSpeed = 5f;
 
     private bool isMoving = false;
-    private GameObject player;
 
-    private void Start()
-    {
-        player = GameObject.FindGameObjectWithTag("Player");
-;    }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject == player)
+        if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
             StartCoroutine(WaitToMove(1f));
         }

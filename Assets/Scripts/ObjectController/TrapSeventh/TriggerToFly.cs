@@ -10,21 +10,15 @@ public class TriggerToFly : MonoBehaviourPunCallbacks
 
     private bool isMoving = false;
     private Vector3 targetPosition;
-    private GameObject player;
     private int count = 0;
     public GameObject moveObject;
     public Transform secondMoveObjectTransform;
     public Transform thirdMoveObjectTransform;
 
 
-    private void Start()
-    {
-        player = GameObject.FindGameObjectWithTag("Player");
-    }
-
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject == player && !isMoving)
+        if (other.gameObject.layer == LayerMask.NameToLayer("Player") && !isMoving)
         {
             targetPosition = objectA.position;
             StartCoroutine(MoveToTargetPosition(other.transform));
@@ -39,7 +33,7 @@ public class TriggerToFly : MonoBehaviourPunCallbacks
             moveObject.transform.position = secondMoveObjectTransform.position;
             StartCoroutine(MoveObjectBack());
         }
-        Debug.Log(count);
+        //Debug.Log(count);
     }
 
 

@@ -8,7 +8,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
     public static PlayerController Instance;
     Rigidbody rb;
     private float moveSpeed = 1.5f;
-    private float sprintSpeed = 2.1f;
+    private float sprintSpeed = 2.22f;
     private float rotationSpeed = 15f;
     private float animationBlendSpeed = 2f;
     Camera cam;
@@ -28,9 +28,11 @@ public class PlayerController : MonoBehaviourPunCallbacks
     LayerMask whatIsGround;
 
     [Header("Player Mana")]
-    private float maxMana = 10000100f;
-    private float manaReduce = 10f;
-    float currentMana;
+    private float maxMana = 100f;
+    private float manaReduce = 50f;
+    private float currentMana;
+    private float manaRecovery = 10f;
+    private PowerBar powerBar;
 
     bool isTouchingRotatingObject = false;
     bool isCooldown = false;
@@ -41,7 +43,6 @@ public class PlayerController : MonoBehaviourPunCallbacks
     private GameObject parentObjLeft;
     private GameObject parentObjRight;
     private GameObject parentBTwoObject;
-    private GameObject parentTrampolineObject;
     private GameObject spindleTrap;
     private GameObject parentTrampolineObjectVTwo;
     private GameObject parentGroundBounceRight;
@@ -53,8 +54,6 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
     [Header("Check Point")]
     public GameObject player;
-    //public Vector3 checkPoint;
-    //float deadPosY = -20f;
     private Vector3 lastCheckpointPosition;
 
 
@@ -71,19 +70,20 @@ public class PlayerController : MonoBehaviourPunCallbacks
     void Start()
     {
         cam = GameManager.Instance.cam;
+        powerBar = GameManager.Instance.powerBar;
 
         whatIsGround = LayerMask.GetMask("Ground");
 
         parentObjLeft = GameManager.Instance.parentObjLeft;
         parentObjRight = GameManager.Instance.parentObjRight;
         parentBTwoObject = GameManager.Instance.parentBTwoObject;
-        parentTrampolineObject = GameManager.Instance.parentTrampolineObject;
         spindleTrap = GameManager.Instance.spindleTrap;
         parentTrampolineObjectVTwo = GameManager.Instance.parentTrampolineObjectVTwo;
         parentGroundBounceRight = GameManager.Instance.parentGroundBounceRight;
         parentDeathObject = GameManager.Instance.parentDeathObject;
 
         currentMana = maxMana;
+        powerBar.SetMaxMana(maxMana);
     }
 
     void Update()
@@ -141,7 +141,14 @@ public class PlayerController : MonoBehaviourPunCallbacks
         else
         {
             mSprinting = false;
+            currentMana += manaRecovery * Time.deltaTime;
+            if(currentMana >= maxMana)
+            {
+                currentMana = maxMana;
+            }
+
         }
+        powerBar.SetMana(currentMana);
 
         Vector3 movement = new Vector3(horizontalInput, 0, verticalInput).normalized;
         Vector3 rotatedMovement = Quaternion.Euler(0, cam.transform.rotation.eulerAngles.y, 0) * movement;
@@ -236,16 +243,9 @@ public class PlayerController : MonoBehaviourPunCallbacks
                 bounceForce = 10f;
             }
 
-            if (IsChildOfParent(collision.gameObject, parentTrampolineObject))
-            {
-                //bounceDirection = Vector3.back + Vector3.up;
-                bounceDirection = Quaternion.Euler(-45f, 0f, 0f) * surfaceNormal;
-                bounceForce = 20f;
-            }
-
             if(IsChildOfParent(collision.gameObject, spindleTrap))
             {
-                bounceDirection = Quaternion.Euler(-45f, 0f, 0f) * surfaceNormal;
+                bounceDirection = transform.position - collision.transform.position;
                 bounceForce = 20f;
             }
 
@@ -265,6 +265,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
             {
                 //load checkpoint
                 StartCoroutine(WaitToLoadCheckPoint(1f));
+                bounceForce = 0f;
             }
 
             AddForceToPlayer();

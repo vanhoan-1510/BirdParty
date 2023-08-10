@@ -8,14 +8,10 @@ public class TriggerToMove : MonoBehaviour
 
     private bool isMoving = false;
 
-    private void Start()
-    {
-        player = GameObject.FindGameObjectWithTag("Player");
-    }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject == player)
+        if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
             isMoving = true;
         }

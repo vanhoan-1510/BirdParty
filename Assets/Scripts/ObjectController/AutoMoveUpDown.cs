@@ -10,11 +10,8 @@ public class AutoMoveUpDown : MonoBehaviour
     private Vector3 initialPosition;
     private bool movingUp = true;
 
-    GameObject player;
-
     private void Start()
     {
-        player = GameObject.FindGameObjectWithTag("Player");
         initialPosition = transform.position;
     }
 
@@ -49,7 +46,7 @@ public class AutoMoveUpDown : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject == player)
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
             transform.Translate(Vector3.down * moveSpeed * Time.deltaTime);
             isColliding = true;
@@ -58,7 +55,7 @@ public class AutoMoveUpDown : MonoBehaviour
 
     private void OnCollisionExit(Collision collision)
     {
-        if (collision.gameObject == player)
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
             movingUp = true;
         }
