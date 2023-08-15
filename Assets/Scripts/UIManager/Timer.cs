@@ -127,7 +127,7 @@ public class Timer : MonoBehaviour
         if (!countDown && timer != timerDuration)
         {
             timer = timerDuration;
-            timesUpField.text = "Het gio roi kia bruh";
+            //timesUpField.text = "Het gio roi kia bruh";
             UpdateTimerDisplay(timer);
         }
 

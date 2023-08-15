@@ -2,6 +2,8 @@ using UnityEngine;
 using Photon.Pun;
 using System.Collections.Generic;
 using UnityEngine.UI;
+using LootLocker.Requests;
+using Photon.Realtime;
 
 public class FinishRaceTrigger : MonoBehaviourPun
 {
@@ -12,20 +14,37 @@ public class FinishRaceTrigger : MonoBehaviourPun
 
     public GameObject winningGame;
 
-    public LeaderboardController leaderboardController;
     public Timer timer;
+    public string leaderboardKey = "birdpartygame_leaderboard";
+
+    private string roomMembersNames = "";
+    int maxScore = 10;
+    public Text[] Entries;
 
     private void Start()
     {
-        // Determine the number of players required to trigger the checkpoint
-        Debug.Log("So nguoi trong rum: " + requiredPlayersToActivate);
+        //check lootlocker status
+        LootLockerSDKManager.StartGuestSession((response) =>
+        {
+            if (!response.success)
+            {
+                Debug.Log("error starting LootLocker session");
 
-        // Set the initial position as the save point for the player
-        //savePoint.position = transform.position;
+                return;
+            }
+
+            Debug.Log("successfully started LootLocker session");
+        });
+
+        if (PhotonNetwork.InRoom)
+        {
+            UpdateRoomMembersList();
+        }
     }
     private void Update()
     {
         requiredPlayersToActivate = PhotonNetwork.PlayerList.Length;
+        //ShowScore();
         //Debug.Log("thoi gian la: " + timer.timeToPost);
     }
 
@@ -74,10 +93,68 @@ public class FinishRaceTrigger : MonoBehaviourPun
                 int currentTime = PlayerPrefs.GetInt("timeToPost");
                 winningGame.SetActive(true);
                 //Time.timeScale = 0f;
-                leaderboardController.SubmitScoreRoutine(currentTime);
-                Debug.Log(currentTime);
+                SubmitScore(currentTime);
+                Debug.Log("thoi gian: " +currentTime);
 
             }
         }
+    }
+
+    public void SubmitScore(int timeScore)
+    {
+        LootLockerSDKManager.SubmitScore(roomMembersNames, timeScore, leaderboardKey, (response) =>
+        {
+            if (response.statusCode == 200)
+            {
+                Debug.Log("Successful");
+            }
+            else
+            {
+                Debug.Log("failed: " + response.Error);
+            }
+        });
+    }
+
+    public void ShowScore()
+    {
+        LootLockerSDKManager.GetScoreList(leaderboardKey, maxScore, (response) =>
+        {
+            if (response.statusCode == 200)
+            {
+                LootLockerLeaderboardMember[] score = response.items;
+
+                for (int i = 0; i < score.Length; i++)
+                {
+                    Entries[i].text = score[i].rank + ". " +score[i].member_id + " " +  score[i].score;
+                }
+
+                if(score.Length < maxScore)
+                {
+                    for (int i = score.Length; i < maxScore; i++)
+                    {
+                        Entries[i].text = (i + 1).ToString() + ".   None";
+                    }
+                }
+            }
+                
+        });
+    }
+
+    public void UpdateRoomMembersList()
+    {
+        roomMembersNames = "";
+
+        foreach (Player player in PhotonNetwork.PlayerList)
+        {
+            roomMembersNames += player.NickName + ", ";
+        }
+
+        // Remove the trailing comma and space
+        if (!string.IsNullOrEmpty(roomMembersNames))
+        {
+            roomMembersNames = roomMembersNames.Substring(0, roomMembersNames.Length - 2);
+        }
+
+        Debug.Log("Room Members: " + roomMembersNames);
     }
 }
