@@ -132,7 +132,7 @@ Changed: The re-usable list of PhotonViews in RemoveInstantiatedGO() is now clea
 Added: OfflineMode to StaticReset(). So fast play mode (without domain reload) will not keep the client in offline mode.
 Changed: PhotonNetwork.Server for offline mode. It will now report the GameServer when an offlineroom is existing.
 Added: In OfflineMode, PhotonNetwork.LeaveRoom() will now also call the OnConnectedToMaster() callback. As the OfflineMode changes values immediately, the timing of callbacks might be slightly different than in online mode. Joining a room offline is instantaneous.
-Updated: Library to v4.1.5.0. which includes using the new Native Encryptor API (v2), a fix for NonAllocDictionary.Remove() and new StatusCode entries for DNS and IP issues.
+Updated: Library to v4.1.5.0. which includes using the new Native Encryptor API (v2), a fix for NonAllocDictionary.Remove() and new StatusCode PlayerNameList for DNS and IP issues.
 
 v2.27 (12. January 2021)
 Removed: "Simple" networking. Due to the progress on an upcoming networkin solution (Fusion), we will keep this set of components an external addon in maintenance mode (supported but not improved/extended).

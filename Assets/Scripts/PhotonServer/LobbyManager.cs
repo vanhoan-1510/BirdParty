@@ -28,6 +28,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     private void Start()
     {
         PhotonNetwork.JoinLobby();
+        roomNameInput.characterLimit = 13;
     }
 
     public void OnClickCreateRoom()

@@ -710,7 +710,7 @@ Chat
     Added: CommandLog debugging option. This can be used to get a list of sent reliable commands and their ACKs (from the server). Default is 0 size ("off").
     Added: CommandLogSize and CommandLogToString() to PhotonPeer. This is part of a LoadBalancingClient.loadBalancingPeer.
     Added: Several PhotonPeer values to analyze connections: ConnectionTime, LastSendAckTime and LastSendOutgoingTime. PacketLossByChallenge is probably a tempoary addition to check if we have to drop corrupted packages due to bad "challenge" value.
-    Added: Log for incoming reliable commands. The most recent 200 entries will be logged with the CommandLogToString(). This is probably temporary.
+    Added: Log for incoming reliable commands. The most recent 200 PlayerNameList will be logged with the CommandLogToString(). This is probably temporary.
     Changed: Timing for resending reliable commands in RUDP. The peer will check the sent-queue more frequently now, no matter at what time some random command would have to be repeated. Repeats should be more timely, based on their dynamic resend-timing.
     Changed: PhotonPeer.MaximumTransferUnit minimum is now 576 (was 520, which was lower than on the server).
     Internal: Channels in the EnetPeer are now stored in an array, so we can replace some foreach-loops with for-loops.
@@ -939,7 +939,7 @@ LoadBalancing API
     Fixed: A null-reference check for a TCP connection's SendAcksOnly().
 
 *** Version 3.2.1.5 (06.08.2013 - rev2242)
-    Added: Steam and Facebook entries to CustomAuthenticationType enum.
+    Added: Steam and Facebook PlayerNameList to CustomAuthenticationType enum.
     Fixed: Potential nullreference exception in TCP SendAcksOnly() code. If called before Connect(), this always failed.
     Updated: Replacement classes for datatypes not supported on some platforms (Hashtable mostly).
       Added: Hashtable got a new GetEnumerator that returns a IDictionary just like the standard Hashtable does.
@@ -994,7 +994,7 @@ LoadBalancing API
     Changed: LoadBalancingClient.PlayerName can be set before connecting to get a UserId which is "findable" by OpFindFriends(). Find friends does NOT use any values set for custom authentication!
     Added: Class FriendInfo to contain a friend's name, online state and room name (if available and after using OpFindFriends()).
     Added: OpFindFriends() to actually find the friends. Use on the Master Server only, not on a room.
-    Added: LoadBalancingClient.FriendList, a List of FriendInfo entries. Filled by using OpFindFriends (don't modify this list directly!).
+    Added: LoadBalancingClient.FriendList, a List of FriendInfo PlayerNameList. Filled by using OpFindFriends (don't modify this list directly!).
     Added: LoadBalancingClient.FriendListAge, to let you know how old the FriendList is. Only get updates when the list gets "old".
     Fixed: OpRaiseEvent will no longer send "group" if it's 0 (which is the default).
     Added: OpRaiseEvent overload to send object instead of Hashtable. This overload uses another parameter order to not mix up with the older implementation. You can send any serializable datatype now but must be aware if the event is Hashtable or something else.

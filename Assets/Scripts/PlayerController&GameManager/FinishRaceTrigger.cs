@@ -18,8 +18,9 @@ public class FinishRaceTrigger : MonoBehaviourPun
     public string leaderboardKey = "birdpartygame_leaderboard";
 
     private string roomMembersNames = "";
-    int maxScore = 10;
-    public Text[] Entries;
+    int maxScore = 5;
+    public Text[] PlayerNameList;
+    public Text[] PlayerScoreList;
 
     private void Start()
     {
@@ -125,14 +126,35 @@ public class FinishRaceTrigger : MonoBehaviourPun
 
                 for (int i = 0; i < score.Length; i++)
                 {
-                    Entries[i].text = score[i].rank + ". " +score[i].member_id + " " +  score[i].score;
+                    PlayerNameList[i].text = score[i].member_id;
+                    if (score[i].score == 0)
+                    {
+                        PlayerScoreList[i].text = "0";
+                    }
+                    else if (score[i].score / 100  < 10)
+                    {
+                        PlayerScoreList[i].text = "0" + score[i].score / 100 + " : " + score[i].score % 100;
+                    }
+                    else if (score[i].score / 100 == 0)
+                    {
+                        PlayerScoreList[i].text = "00" + score[i].score / 100 + " : " + score[i].score % 100;
+                    }
+                    else if (score[i].score % 100  == 0)
+                    {
+                        PlayerScoreList[i].text = score[i].score / 100 + " : 00";
+                    }
+                    else
+                    {
+                        PlayerScoreList[i].text = score[i].score / 100 + " : " + score[i].score % 100;
+                    }
                 }
 
                 if(score.Length < maxScore)
                 {
                     for (int i = score.Length; i < maxScore; i++)
                     {
-                        Entries[i].text = (i + 1).ToString() + ".   None";
+                        PlayerNameList[i].text =  "None";
+                        PlayerScoreList[i].text = "00 : 00";
                     }
                 }
             }
