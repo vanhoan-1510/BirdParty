@@ -5,6 +5,7 @@ using System.Collections;
 
 public class PlayerSpawner : MonoBehaviourPunCallbacks
 {
+    public static PlayerSpawner Instance;
     public GameObject[] playerPrefab;
     public Transform[] spawnPoints;
     public GameObject newPlayer;
@@ -12,15 +13,16 @@ public class PlayerSpawner : MonoBehaviourPunCallbacks
 
     private void Start()
     {
-        PlayerSpawn();
+        StartCoroutine(PlayerSpawn());
     }
 
     private void Update()
     {
     }
 
-    void PlayerSpawn()
+    IEnumerator PlayerSpawn()
     {
+        yield return new WaitForSeconds(5f);
         int randomNumber = Random.Range(0, spawnPoints.Length);
         Transform spawnPoint = spawnPoints[randomNumber];
         GameObject playerToSpawn = playerPrefab[(int)PhotonNetwork.LocalPlayer.CustomProperties["playerAvatar"]];   
@@ -34,28 +36,4 @@ public class PlayerSpawner : MonoBehaviourPunCallbacks
             cinemachineCamera.LookAt = newPlayer.transform;
         }
     }
-
-    //[PunRPC]
-    //public void SaveCheckpoint(Vector3 checkpointPosition)
-    //{
-    //    // Save the checkpoint position for the player
-    //    lastCheckpointPosition = checkpointPosition;
-    //    Debug.Log("Checkpoint saved for player: " + photonView.Owner.NickName);
-    //}
-
-    //public void RespawnAtLastCheckpoint()
-    //{
-    //    if (transform.position.y < -20f)
-    //    {
-    //        Destroy(player);
-    //        StartCoroutine(RespawnPlayerAfterTime(1f));
-    //        Debug.Log("Player respawned at last checkpoint: " + photonView.Owner.NickName);
-    //    }
-    //}
-
-    //private IEnumerator RespawnPlayerAfterTime(float time)
-    //{
-    //    yield return new WaitForSeconds(time);
-    //    PhotonNetwork.Instantiate(playerToSpawn.name, lastCheckpointPosition, Quaternion.identity);
-    //}
 }

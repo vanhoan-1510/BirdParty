@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 1b2cecc6c68e4ee4eacfe3cf72634f45
+guid: 4ef6216c41649834ab679615416dbd98
 TrueTypeFontImporter:
   externalObjects: {}
   serializedVersion: 4
@@ -9,7 +9,7 @@ TrueTypeFontImporter:
   characterPadding: 1
   includeFontData: 1
   fontNames:
-  - Plaguard
+  - Super Boom
   fallbackFontReferences: []
   customCharacters: 
   fontRenderingMode: 0

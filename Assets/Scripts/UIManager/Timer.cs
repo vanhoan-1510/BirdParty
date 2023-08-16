@@ -1,9 +1,10 @@
-using TMPro;
-using Unity.VisualScripting;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using Photon.Pun;
+using Photon.Realtime;
 
-public class Timer : MonoBehaviour
+public class Timer : MonoBehaviourPunCallbacks
 {
     [SerializeField]
     private float timerDuration = 3f * 60f; //Duration of the timer in seconds
@@ -37,9 +38,44 @@ public class Timer : MonoBehaviour
 
     public Text timesUpField;
 
+    public int countDownTime = 3;
+    public Text countDownText;
+
+    private bool allPlayersLoaded = false;
+
     private void Start()
     {
+        if (PhotonNetwork.IsConnectedAndReady)
+        {
+            CheckAllPlayersLoaded();
+        }
+
         ResetTimer();
+        StartCoroutine(CountDownToStart());
+    }
+
+    public override void OnPlayerEnteredRoom(Player newPlayer)
+    {
+        CheckAllPlayersLoaded();
+    }
+
+    public override void OnPlayerLeftRoom(Player otherPlayer)
+    {
+        CheckAllPlayersLoaded();
+    }
+
+    private void CheckAllPlayersLoaded()
+    {
+        if (PhotonNetwork.CurrentRoom.PlayerCount == PhotonNetwork.CurrentRoom.Players.Count)
+        {
+            allPlayersLoaded = true;
+            Debug.Log("All players have loaded.");
+        }
+        else
+        {
+            allPlayersLoaded = false;
+            Debug.Log("Not all players have loaded.");
+        }
     }
 
     private void ResetTimer()
@@ -56,6 +92,14 @@ public class Timer : MonoBehaviour
     }
 
     void Update()
+    {
+        if(countDownText.text == "GO!")
+        {
+            CountTime();
+        }
+    }
+
+    public void CountTime()
     {
         if (countDown && timer > 0)
         {
@@ -157,5 +201,28 @@ public class Timer : MonoBehaviour
 
         //Use this for a single text object
         //timerText.enabled = enabled;
+    }
+
+    IEnumerator CountDownToStart()
+    {
+        if (allPlayersLoaded)
+        {
+            while (countDownTime > 0)
+            {
+                countDownText.text = countDownTime.ToString();
+                yield return new WaitForSeconds(1f);
+                countDownTime--;
+            }
+            countDownText.text = "GO!";
+
+            yield return new WaitForSeconds(1f);
+
+            countDownText.gameObject.SetActive(false);
+        }
+        else
+        {
+            countDownTime = 5;
+        }
+        
     }
 }
