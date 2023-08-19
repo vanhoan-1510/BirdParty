@@ -3,8 +3,9 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Photon.Pun;
+using Photon.Realtime;
 
-public class LoadingScreenManager : MonoBehaviour
+public class LoadingScreenManager : MonoBehaviourPunCallbacks
 {
     public static LoadingScreenManager Instance;
     public GameObject loadingScreen;
@@ -29,22 +30,44 @@ public class LoadingScreenManager : MonoBehaviour
     public void LoadScreen(string sceneName)
     {
         targetSceneName = sceneName;
-        StartCoroutine(LoadSceneRoutine());
+        if (PhotonNetwork.IsMasterClient)
+        {
+            StartCoroutine(LoadSceneRoutine());
+        }
     }
 
     private IEnumerator LoadSceneRoutine()
     {
+        //foreach (int playerID in playersInRoom)
+        //{
+        //    PhotonView playerView = PhotonView.Find(playerID);
+        //}
         isLoading = true;
 
-        loadingScreen.SetActive(true);
+        //photonView.RPC("ShowLoadingScreen", RpcTarget.All);
+        ShowLoadingScreen();
+        Debug.Log("OK k sao");
         yield return new WaitForSeconds(3f);
         StartCoroutine(WheelSpinRoutine());
 
         PhotonNetwork.LoadLevel(targetSceneName);
         yield return new WaitForSeconds(2f);
-        loadingScreen.SetActive(false);
+        //photonView.RPC("HideLoadingScreen", RpcTarget.All);
+        HideLoadingScreen();
 
         isLoading = false;
+    }
+
+    [PunRPC]
+    public void ShowLoadingScreen()
+    {
+        loadingScreen.SetActive(true);
+    }
+
+    [PunRPC]
+    public void HideLoadingScreen()
+    {
+        loadingScreen.SetActive(false);
     }
 
     private IEnumerator WheelSpinRoutine()

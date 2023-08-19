@@ -3,6 +3,7 @@ using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class LobbyManager : MonoBehaviourPunCallbacks
 {
@@ -10,6 +11,8 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     public GameObject lobbyPanel;
     public GameObject roomPanel;
     public Text roomName;
+    public GameObject listRoomPanel;
+    public GameObject createRoomPanel;
 
     public RoomItem roomItemPrefab;
     List<RoomItem> roomItemList = new List<RoomItem>();
@@ -23,7 +26,6 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     public Transform playerItemParent;
 
     public GameObject startGameButton;
-    public GameObject hostRoomItem;
 
     private void Start()
     {
@@ -140,6 +142,23 @@ public class LobbyManager : MonoBehaviourPunCallbacks
             startGameButton.SetActive(false);
             //hostRoomItem.SetActive(false);
         }
+    }
+
+    public void OnClickShowRoomList()
+    {
+        listRoomPanel.SetActive(true);
+        createRoomPanel.SetActive(false);
+    }
+
+    public void OnClickBack()
+    {
+        listRoomPanel.SetActive(false);
+        createRoomPanel.SetActive(true);
+    }
+
+    public void OnClickbackToMenu()
+    {
+        SceneManager.LoadScene("MainLobby");
     }
 
     public void OnClickStartGame()

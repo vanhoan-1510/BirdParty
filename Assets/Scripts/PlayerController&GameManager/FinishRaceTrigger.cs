@@ -13,6 +13,7 @@ public class FinishRaceTrigger : MonoBehaviourPun
     private List<int> playersInRoom = new List<int>();
 
     public GameObject winningGame;
+    public Text timeScore;
 
     public Timer timer;
     public string leaderboardKey = "birdpartygame_leaderboard";
@@ -21,6 +22,9 @@ public class FinishRaceTrigger : MonoBehaviourPun
     int maxScore = 5;
     public Text[] PlayerNameList;
     public Text[] PlayerScoreList;
+ 
+    public Text playerTriggeredText;
+
 
     private void Start()
     {
@@ -45,8 +49,13 @@ public class FinishRaceTrigger : MonoBehaviourPun
     private void Update()
     {
         requiredPlayersToActivate = PhotonNetwork.PlayerList.Length;
-        //ShowScore();
-        //Debug.Log("thoi gian la: " + timer.timeToPost);
+        
+        playerTriggeredText.text = playersTriggered + "/" + requiredPlayersToActivate;
+
+        if(playersTriggered == requiredPlayersToActivate)
+        {
+            playerTriggeredText.text =  " 0/" + requiredPlayersToActivate;
+        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -92,11 +101,13 @@ public class FinishRaceTrigger : MonoBehaviourPun
             if (playerView != null && playerView.IsMine)
             {
                 int currentTime = PlayerPrefs.GetInt("timeToPost");
+                timeScore.text = currentTime / 100 + " : " + currentTime % 100;
                 winningGame.SetActive(true);
                 //Time.timeScale = 0f;
                 SubmitScore(currentTime);
-                Debug.Log("thoi gian: " +currentTime);
-
+                Time.timeScale = 0f;
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = false;
             }
         }
     }

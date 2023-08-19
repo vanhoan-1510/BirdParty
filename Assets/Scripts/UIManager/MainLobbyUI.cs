@@ -10,12 +10,21 @@ public class MainLobbyUI : MonoBehaviourPunCallbacks
     public GameObject mainLobbyUI;
     public GameObject leaderBoard;
     public GameObject settings;
+    public GameObject quitGameNoti;
+
     public GameObject onButtonMusic;
     public GameObject offButtonMusic;
-
     public GameObject onButtonSound;
     public GameObject offButtonSound;
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            quitGameNoti.SetActive(true);
+            mainLobbyUI.SetActive(false);
+        }
+    }
     public void OnClickLeaderBoard()
     {
         mainLobbyUI.SetActive(false);
@@ -33,6 +42,7 @@ public class MainLobbyUI : MonoBehaviourPunCallbacks
         mainLobbyUI.SetActive(true);
         leaderBoard.SetActive(false);
         settings.SetActive(false);
+        quitGameNoti.SetActive(false);
     }
 
     public void OnCLickChangeStateMusic()
@@ -63,7 +73,7 @@ public class MainLobbyUI : MonoBehaviourPunCallbacks
         }
     }
 
-    public void OnLickQuitGame()
+    public void OnClickQuitGame()
     {
         Application.Quit();
     }

@@ -205,6 +205,7 @@ public class Timer : MonoBehaviourPunCallbacks
 
     IEnumerator CountDownToStart()
     {
+         yield return new WaitForSeconds(2f);
         if (allPlayersLoaded)
         {
             while (countDownTime > 0)

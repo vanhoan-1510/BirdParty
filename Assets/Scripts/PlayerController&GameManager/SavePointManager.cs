@@ -1,6 +1,7 @@
 using UnityEngine;
 using Photon.Pun;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
 public class SavePointManager : MonoBehaviourPun
 {
@@ -13,17 +14,12 @@ public class SavePointManager : MonoBehaviourPun
 
     private List<int> playersInRoom = new List<int>();
 
-    private void Start()
-    {
-        // Determine the number of players required to trigger the checkpoint
-        Debug.Log("So nguoi trong rum: " + requiredPlayersToActivate);
+    public Text playerTriggeredText;
 
-        // Set the initial position as the save point for the player
-        //savePoint.position = transform.position;
-    }
     private void Update()
     {
         requiredPlayersToActivate = PhotonNetwork.PlayerList.Length;
+        playerTriggeredText.text = playersTriggered + "/" + requiredPlayersToActivate;
     }
 
     private void OnTriggerEnter(Collider other)
