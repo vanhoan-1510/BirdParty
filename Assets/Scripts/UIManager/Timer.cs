@@ -3,11 +3,12 @@ using UnityEngine;
 using UnityEngine.UI;
 using Photon.Pun;
 using Photon.Realtime;
+using System.Collections.Generic;
 
 public class Timer : MonoBehaviourPunCallbacks
 {
     [SerializeField]
-    private float timerDuration = 3f * 60f; //Duration of the timer in seconds
+    private float timerDuration; //Duration of the timer in seconds
 
     [SerializeField]
     private bool countDown = true;
@@ -24,7 +25,6 @@ public class Timer : MonoBehaviourPunCallbacks
     [SerializeField]
     private Text secondSecond;
 
-    //Use this for a single text object
     [SerializeField]
     public Text timerText;
 
@@ -42,6 +42,8 @@ public class Timer : MonoBehaviourPunCallbacks
     public Text countDownText;
 
     private bool allPlayersLoaded = false;
+
+    public GameObject gameOverPanel;
 
     private void Start()
     {
@@ -118,6 +120,11 @@ public class Timer : MonoBehaviourPunCallbacks
         //Debug.Log(currentTime);
         timeToPost = int.Parse(currentTime);
         PlayerPrefs.SetInt("timeToPost", timeToPost);
+
+        if (timeToPost >= timerDuration)
+        {
+            StartCoroutine(GameOver());
+        }
     }
 
     private void UpdateTimerDisplay(float time)
@@ -145,6 +152,13 @@ public class Timer : MonoBehaviourPunCallbacks
 
         //Use this for a single text object
         //timerText.text = currentTime.ToString();
+    }
+
+    IEnumerator GameOver()
+    {
+        yield return new WaitForSeconds(1f);
+        Debug.Log("Game Over");
+        gameOverPanel.SetActive(true);
     }
 
 
