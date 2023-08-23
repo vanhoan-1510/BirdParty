@@ -1,9 +1,6 @@
 using System.Collections;
 using UnityEngine;
-using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 using Photon.Pun;
-using Photon.Realtime;
 
 public class LoadingScreenManager : MonoBehaviourPunCallbacks
 {
@@ -14,8 +11,6 @@ public class LoadingScreenManager : MonoBehaviourPunCallbacks
 
     public GameObject loadingWheel;
     public float wheelSpeed;
-    private bool isLoading;
-
 
     private void Awake()
     {
@@ -33,34 +28,40 @@ public class LoadingScreenManager : MonoBehaviourPunCallbacks
         if (PhotonNetwork.IsMasterClient)
         {
             StartCoroutine(LoadSceneRoutine());
+            photonView.RPC("SyncMusic", RpcTarget.All);
         }
+
+    }
+
+    [PunRPC]
+    public void SyncMusic()
+    {
+        Debug.Log("OK da phat nhac");
+        AudioManager.Instance.StopMusic("MainLobbyMusic");
+        AudioManager.Instance.PlayMusic("PlayGameMusic");
+        Debug.Log("OK da phat nhac");
+        AudioManager.Instance.audioListener.enabled = false;
     }
 
     private IEnumerator LoadSceneRoutine()
     {
-        //foreach (int playerID in playersInRoom)
-        //{
-        //    PhotonView playerView = PhotonView.Find(playerID);
-        //}
-        isLoading = true;
 
-        //photonView.RPC("ShowLoadingScreen", RpcTarget.All);
-        ShowLoadingScreen();
+
+        photonView.RPC("ShowLoadingScreen", RpcTarget.All);
+        //ShowLoadingScreen();
         Debug.Log("OK k sao");
         yield return new WaitForSeconds(3f);
-        StartCoroutine(WheelSpinRoutine());
 
         PhotonNetwork.LoadLevel(targetSceneName);
         yield return new WaitForSeconds(2f);
-        //photonView.RPC("HideLoadingScreen", RpcTarget.All);
-        HideLoadingScreen();
-
-        isLoading = false;
+        photonView.RPC("HideLoadingScreen", RpcTarget.All);
+        //HideLoadingScreen();
     }
 
     [PunRPC]
     public void ShowLoadingScreen()
     {
+        Debug.Log("OK loading k loi");
         loadingScreen.SetActive(true);
     }
 
@@ -70,12 +71,4 @@ public class LoadingScreenManager : MonoBehaviourPunCallbacks
         loadingScreen.SetActive(false);
     }
 
-    private IEnumerator WheelSpinRoutine()
-    {
-        while(isLoading)
-        {
-            loadingWheel.transform.Rotate(0, 0, wheelSpeed);
-            yield return null;
-        }
-    }
 }

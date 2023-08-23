@@ -15,6 +15,7 @@ public class ConnectToServer : MonoBehaviourPunCallbacks
     {
         if (usernameInput.text.Length >= 1)
         {
+            AudioManager.Instance.PlaySFX("ClickButton");
             PhotonNetwork.NickName = usernameInput.text;
             buttonText.text = "Connecting...";
             PhotonNetwork.AutomaticallySyncScene = true;

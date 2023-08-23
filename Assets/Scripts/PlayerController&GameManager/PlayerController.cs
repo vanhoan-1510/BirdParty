@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using UnityEngine;
 using Photon.Pun;
-using Photon.Realtime;
 
 public class PlayerController : MonoBehaviourPunCallbacks
 {
@@ -113,6 +112,8 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
         if (Input.GetButtonDown("Jump") && !mJumping && grounded)
         {
+            photonView.RPC("SyncJumpSound", RpcTarget.All);
+            //SyncJumpSound();
             mJumping = true;
             animator.SetBool("isJumping", true);
 
@@ -173,6 +174,12 @@ public class PlayerController : MonoBehaviourPunCallbacks
         Quaternion currentRotation = transform.rotation;
         Quaternion targetRotation = Quaternion.Euler(0, mDesiredRotation, 0);
         transform.rotation = Quaternion.Lerp(currentRotation, targetRotation, rotationSpeed * Time.deltaTime);
+    }
+
+    [PunRPC]
+    private void SyncJumpSound()
+    {
+        AudioManager.Instance.PlayPlayerSFXSound("Jumping");
     }
         
     public void Falling()

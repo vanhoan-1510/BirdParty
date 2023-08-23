@@ -105,9 +105,8 @@ public class FinishRaceTrigger : MonoBehaviourPun
                 winningGame.SetActive(true);
                 //Time.timeScale = 0f;
                 SubmitScore(currentTime);
-                Time.timeScale = 0f;
                 Cursor.lockState = CursorLockMode.None;
-                Cursor.visible = false;
+                Cursor.visible = true;
             }
         }
     }
@@ -129,6 +128,7 @@ public class FinishRaceTrigger : MonoBehaviourPun
 
     public void ShowScore()
     {
+        AudioManager.Instance.PlaySFX("ClickButton");
         LootLockerSDKManager.GetScoreList(leaderboardKey, maxScore, (response) =>
         {
             if (response.statusCode == 200)

@@ -47,6 +47,10 @@ MonoBehaviour:
   - StartTargetScene
   - HideLoadingScreen
   - ShowLoadingScreen
+  - SyncJumpSound
+  - LoadScreen
+  - SyncMusic
+  - WheelSpinRoutine
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1

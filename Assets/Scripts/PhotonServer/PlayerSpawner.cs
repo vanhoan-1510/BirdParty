@@ -7,9 +7,13 @@ public class PlayerSpawner : MonoBehaviourPunCallbacks
 {
     public static PlayerSpawner Instance;
     public GameObject[] playerPrefab;
+
     public Transform[] spawnPoints;
     public GameObject newPlayer;
+
     public Vector3 lastCheckpointPosition;
+
+    public AudioSource playerAudioSource;
 
     private void Start()
     {
@@ -23,10 +27,15 @@ public class PlayerSpawner : MonoBehaviourPunCallbacks
         int playerAvatarIndex = (int)PhotonNetwork.LocalPlayer.CustomProperties["playerAvatar"];
         GameObject playerToSpawn = playerPrefab[playerAvatarIndex];
 
-        int spawnIndex = GetNextSpawnIndex();
-        Transform spawnPoint = spawnPoints[spawnIndex];
+        //int spawnIndex = GetNextSpawnIndex();
+        int randomNumber = Random.Range(0, spawnPoints.Length);
+        Transform spawnPoint = spawnPoints[randomNumber];
+        //Transform spawnPoint = spawnPoints[spawnIndex];
 
         newPlayer = PhotonNetwork.Instantiate(playerToSpawn.name, spawnPoint.position, Quaternion.identity);
+
+        playerAudioSource = newPlayer.GetComponent<AudioSource>();
+        AudioManager.Instance.playerAudioSource = playerAudioSource;
 
         CinemachineFreeLook cinemachineCamera = GameObject.FindGameObjectWithTag("CinemachineCamera").GetComponent<CinemachineFreeLook>();
         if (newPlayer != null)
@@ -37,12 +46,12 @@ public class PlayerSpawner : MonoBehaviourPunCallbacks
         }
     }
 
-    private int nextSpawnIndex = 0;
+    //private int nextSpawnIndex = 0;
 
-    private int GetNextSpawnIndex()
-    {
-        int index = nextSpawnIndex;
-        nextSpawnIndex = (nextSpawnIndex + 1) % spawnPoints.Length;
-        return index;
-    }
+    //private int GetNextSpawnIndex()
+    //{
+    //    int index = nextSpawnIndex;
+    //    nextSpawnIndex = (nextSpawnIndex + 1) % spawnPoints.Length;
+    //    return index;
+    //}
 }
