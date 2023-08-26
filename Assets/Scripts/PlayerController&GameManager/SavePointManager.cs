@@ -40,6 +40,7 @@ public class SavePointManager : MonoBehaviourPun
                     currentCheckpoint = transform;
                     SaveCheckpointForAllPlayers();
                     Debug.Log("Checkpoint activated and saved for all players!");
+                    Timer.Instance.CountTime();
                     Destroy(gameObject);
                     playersTriggered = 0;
                     nextSavePoint.SetActive(true);

@@ -15,11 +15,20 @@ public class TriggerToFly : MonoBehaviourPunCallbacks
     public Transform secondMoveObjectTransform;
     public Transform thirdMoveObjectTransform;
 
+    public GameObject parentTrampolineObject;
+
+    private void Start()
+    {
+        parentTrampolineObject = GameManager.Instance.parentTrampolineObject;
+    }
+
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.layer == LayerMask.NameToLayer("Player") && !isMoving)
         {
+            AudioManager.Instance.PlaySFX("Collision");
+
             targetPosition = objectA.position;
             StartCoroutine(MoveToTargetPosition(other.transform));
             count++;
@@ -66,4 +75,6 @@ public class TriggerToFly : MonoBehaviourPunCallbacks
         moveObject.transform.position = thirdMoveObjectTransform.position;
         count = 0;
     }
+
+
 }

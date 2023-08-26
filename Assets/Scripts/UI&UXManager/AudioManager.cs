@@ -8,9 +8,13 @@ public class AudioManager : MonoBehaviour
 
     public static AudioManager Instance;
 
-    public Sound[] musicSounds, fxSounds, playerSFXSound;
+    public Sound[] musicSounds, fxSounds;
 
-    public AudioSource musicSource, sfxSource, playerAudioSource;
+    public AudioSource musicSource, sfxSource;
+    public AudioSource[] playerAudioSources;
+
+    int musicState;
+    int soundState;
 
     private void Awake()
     {
@@ -29,6 +33,19 @@ public class AudioManager : MonoBehaviour
     private void Start()
     {
         PlayMusic("MainLobbyMusic");
+
+        musicState = PlayerPrefs.GetInt("MusicState");
+        soundState = PlayerPrefs.GetInt("SoundState");
+
+        if (musicState == 0)
+        {
+            MuteMusic();
+        }
+
+        if (soundState == 0)
+        {
+            MuteSFX();
+        }
         //StopMusic("PlayGameMusic");
     }
 
@@ -58,20 +75,6 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-    public void PlayPlayerSFXSound(string name)
-    {
-        Sound s = Array.Find(playerSFXSound, sound => sound.name == name);
-        if (s == null)
-        {
-            Debug.LogWarning("Sound: " + name + " not found!");
-            return;
-        }
-        else
-        {
-            playerAudioSource.PlayOneShot(s.audioClip);
-        }
-    }
-
     public void MuteMusic()
     {
         musicSource.mute = !musicSource.mute;
@@ -80,6 +83,10 @@ public class AudioManager : MonoBehaviour
     public void MuteSFX()
     {
         sfxSource.mute = !sfxSource.mute;
+        for (int i = 0; i < playerAudioSources.Length; i++)
+        {
+            playerAudioSources[i].mute = !playerAudioSources[i].mute;
+        }
     }
 
     public void StopMusic(string name)

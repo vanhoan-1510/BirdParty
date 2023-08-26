@@ -7,24 +7,28 @@ using Photon.Realtime;
 
 public class FinishRaceTrigger : MonoBehaviourPun
 {
+    public static FinishRaceTrigger Instance;
     private int requiredPlayersToActivate; // The number of players required to trigger the checkpoint and save
     private int playersTriggered = 0; // The number of players who triggered the checkpoint
 
     private List<int> playersInRoom = new List<int>();
+    private string roomMembersNames = "";
 
+    private string leaderboardKey = "birdpartygame_leaderboard";
     public GameObject winningGame;
     public Text timeScore;
 
     public Timer timer;
-    public string leaderboardKey = "birdpartygame_leaderboard";
-
-    private string roomMembersNames = "";
-    int maxScore = 5;
-    public Text[] PlayerNameList;
-    public Text[] PlayerScoreList;
  
     public Text playerTriggeredText;
 
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+    }
 
     private void Start()
     {
@@ -103,6 +107,7 @@ public class FinishRaceTrigger : MonoBehaviourPun
                 int currentTime = PlayerPrefs.GetInt("timeToPost");
                 timeScore.text = currentTime / 100 + " : " + currentTime % 100;
                 winningGame.SetActive(true);
+                AudioManager.Instance.PlaySFX("WinGame");
                 //Time.timeScale = 0f;
                 SubmitScore(currentTime);
                 Cursor.lockState = CursorLockMode.None;
@@ -123,53 +128,6 @@ public class FinishRaceTrigger : MonoBehaviourPun
             {
                 Debug.Log("failed: " + response.Error);
             }
-        });
-    }
-
-    public void ShowScore()
-    {
-        AudioManager.Instance.PlaySFX("ClickButton");
-        LootLockerSDKManager.GetScoreList(leaderboardKey, maxScore, (response) =>
-        {
-            if (response.statusCode == 200)
-            {
-                LootLockerLeaderboardMember[] score = response.items;
-
-                for (int i = 0; i < score.Length; i++)
-                {
-                    PlayerNameList[i].text = score[i].member_id;
-                    if (score[i].score == 0)
-                    {
-                        PlayerScoreList[i].text = "0";
-                    }
-                    else if (score[i].score / 100  < 10)
-                    {
-                        PlayerScoreList[i].text = "0" + score[i].score / 100 + " : " + score[i].score % 100;
-                    }
-                    else if (score[i].score / 100 == 0)
-                    {
-                        PlayerScoreList[i].text = "00" + score[i].score / 100 + " : " + score[i].score % 100;
-                    }
-                    else if (score[i].score % 100  == 0)
-                    {
-                        PlayerScoreList[i].text = score[i].score / 100 + " : 00";
-                    }
-                    else
-                    {
-                        PlayerScoreList[i].text = score[i].score / 100 + " : " + score[i].score % 100;
-                    }
-                }
-
-                if(score.Length < maxScore)
-                {
-                    for (int i = score.Length; i < maxScore; i++)
-                    {
-                        PlayerNameList[i].text =  "None";
-                        PlayerScoreList[i].text = "00 : 00";
-                    }
-                }
-            }
-                
         });
     }
 

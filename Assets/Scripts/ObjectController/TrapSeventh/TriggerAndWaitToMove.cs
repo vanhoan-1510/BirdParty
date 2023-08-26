@@ -1,7 +1,8 @@
 using System.Collections;
 using UnityEngine;
+using Photon.Pun;
 
-public class TriggerAndWaitToMove : MonoBehaviour
+public class TriggerAndWaitToMove : MonoBehaviourPunCallbacks
 {
     [SerializeField] private Transform targetObject;
     [SerializeField] private float moveSpeed = 5f;
@@ -13,14 +14,22 @@ public class TriggerAndWaitToMove : MonoBehaviour
     {
         if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
-            StartCoroutine(WaitToMove(1f));
+            Move();
+            photonView.RPC("Move", RpcTarget.All);
         }
+    }
+
+    [PunRPC]
+    public void Move()
+    {
+        StartCoroutine(WaitToMove(1f));
     }
 
     private IEnumerator WaitToMove(float timeToMove)
     {
         yield return new WaitForSeconds(timeToMove);
         isMoving = true;
+        AudioManager.Instance.PlaySFX("Eggy2");
     }
 
     private void Update()

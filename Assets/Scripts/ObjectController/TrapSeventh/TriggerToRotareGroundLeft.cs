@@ -1,6 +1,7 @@
 using UnityEngine;
+using Photon.Pun;
 
-public class TriggerToRotareGroundLeft : MonoBehaviour
+public class TriggerToRotareGroundLeft : MonoBehaviourPunCallbacks
 {
     [SerializeField] private float rotateSpeed = 15f;
 
@@ -24,7 +25,14 @@ public class TriggerToRotareGroundLeft : MonoBehaviour
     {
         if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
-            isRotated = true; ;
+            isRotated = true;
+            photonView.RPC("Rotate", RpcTarget.All);
         }
+    }
+
+    [PunRPC]
+    public void Rotate()
+    {
+        isRotated = true;
     }
 }

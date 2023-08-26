@@ -23,7 +23,8 @@ public class TriggerToRotareGroundRight : MonoBehaviour
     {
         if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
-            isRotated = true;;
+            isRotated = true;
+            AudioManager.Instance.PlaySFX("Eggy1");
         }
     }
 }

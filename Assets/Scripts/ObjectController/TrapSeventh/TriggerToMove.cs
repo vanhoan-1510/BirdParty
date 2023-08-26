@@ -1,6 +1,7 @@
 using UnityEngine;
+using Photon.Pun;
 
-public class TriggerToMove : MonoBehaviour
+public class TriggerToMove : MonoBehaviourPunCallbacks
 {
     [SerializeField] private Transform targetObject;
     [SerializeField] private float moveSpeed = 5f;
@@ -11,10 +12,17 @@ public class TriggerToMove : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        isMoving = true;
         if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
-            isMoving = true;
+            photonView.RPC("Move", RpcTarget.All);
         }
+    }
+
+    [PunRPC]
+    public void Move()
+    {
+        isMoving = true;
     }
 
     private void Update()

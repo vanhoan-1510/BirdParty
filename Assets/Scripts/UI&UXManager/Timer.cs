@@ -3,10 +3,11 @@ using UnityEngine;
 using UnityEngine.UI;
 using Photon.Pun;
 using Photon.Realtime;
-using System.Collections.Generic;
 
 public class Timer : MonoBehaviourPunCallbacks
 {
+    public static Timer Instance;
+
     [SerializeField]
     private float timerDuration; //Duration of the timer in seconds
 
@@ -25,8 +26,7 @@ public class Timer : MonoBehaviourPunCallbacks
     [SerializeField]
     private Text secondSecond;
 
-    [SerializeField]
-    public Text timerText;
+    public Text remindText;
 
     private float flashTimer;
     [SerializeField]
@@ -36,14 +36,22 @@ public class Timer : MonoBehaviourPunCallbacks
 
     string currentTime;
 
-    public Text timesUpField;
-
-    public int countDownTime = 3;
+    public int countDownTime = 5;
     public Text countDownText;
 
     private bool allPlayersLoaded = false;
 
     public GameObject gameOverPanel;
+
+    bool isStartGame = false;
+
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+              Instance = this;
+        }
+    }
 
     private void Start()
     {
@@ -54,6 +62,8 @@ public class Timer : MonoBehaviourPunCallbacks
 
         ResetTimer();
         StartCoroutine(CountDownToStart());
+
+        remindText.text = "You have 45 minutes to complete the game!";
     }
 
     public override void OnPlayerEnteredRoom(Player newPlayer)
@@ -95,12 +105,41 @@ public class Timer : MonoBehaviourPunCallbacks
 
     void Update()
     {
-        if(countDownText.text == "GO!")
+        if (isStartGame)
         {
             CountTime();
         }
     }
 
+    IEnumerator RemindTime()
+    {
+        int timeLeft = int.Parse(currentTime);
+        if(currentTime == "0010")
+        {
+            remindText.text = "";
+        }
+
+        if (currentTime == "3000")
+        {
+            remindText.text = "You have 15 minutes left!";
+            yield return new WaitForSeconds(10f);
+            remindText.text = "";
+        }
+
+        if(currentTime == "4000")
+        {
+            remindText.text = "You have 5 minutes left!";
+            yield return new WaitForSeconds(10f);
+            remindText.text = "";
+        }
+
+        if(currentTime == "4430")
+        {
+            remindText.text = "You have " +  (4500 - timeLeft)  + " seconds left!";
+        }
+    }
+
+    [PunRPC]
     public void CountTime()
     {
         if (countDown && timer > 0)
@@ -121,10 +160,12 @@ public class Timer : MonoBehaviourPunCallbacks
         timeToPost = int.Parse(currentTime);
         PlayerPrefs.SetInt("timeToPost", timeToPost);
 
-        if (timeToPost >= timerDuration)
+        if (timeToPost == 4500)
         {
             StartCoroutine(GameOver());
         }
+
+        StartCoroutine(RemindTime());
     }
 
     private void UpdateTimerDisplay(float time)
@@ -159,6 +200,7 @@ public class Timer : MonoBehaviourPunCallbacks
         yield return new WaitForSeconds(1f);
         Debug.Log("Game Over");
         gameOverPanel.SetActive(true);
+        AudioManager.Instance.PlaySFX("GameOver");
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
     }
@@ -173,7 +215,7 @@ public class Timer : MonoBehaviourPunCallbacks
 
 
         //Use this for a single text object
-        timerText.text = "ERROR";
+        //timerText.text = "ERROR";
     }
 
     private void FlashTimer()
@@ -187,7 +229,6 @@ public class Timer : MonoBehaviourPunCallbacks
         if (!countDown && timer != timerDuration)
         {
             timer = timerDuration;
-            //timesUpField.text = "Het gio roi kia bruh";
             UpdateTimerDisplay(timer);
         }
 
@@ -229,8 +270,13 @@ public class Timer : MonoBehaviourPunCallbacks
                 countDownText.text = countDownTime.ToString();
                 yield return new WaitForSeconds(1f);
                 countDownTime--;
+                if (countDownTime > 0)
+                {
+                    AudioManager.Instance.PlaySFX("CountDown");
+                }              
             }
             countDownText.text = "GO!";
+            AudioManager.Instance.PlaySFX("GoSound");
 
             yield return new WaitForSeconds(1f);
 
@@ -240,6 +286,14 @@ public class Timer : MonoBehaviourPunCallbacks
         {
             countDownTime = 5;
         }
-        
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
+        {
+            isStartGame = true;
+            Debug.Log("Tinh thoi gian");
+        }
     }
 }

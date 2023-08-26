@@ -25,28 +25,21 @@ public class LoadingScreenManager : MonoBehaviourPunCallbacks
     public void LoadScreen(string sceneName)
     {
         targetSceneName = sceneName;
-        if (PhotonNetwork.IsMasterClient)
-        {
-            StartCoroutine(LoadSceneRoutine());
-            photonView.RPC("SyncMusic", RpcTarget.All);
-        }
+        photonView.RPC("SyncMusic", RpcTarget.All);
+        StartCoroutine(LoadSceneRoutine());
 
     }
 
     [PunRPC]
     public void SyncMusic()
     {
-        Debug.Log("OK da phat nhac");
         AudioManager.Instance.StopMusic("MainLobbyMusic");
         AudioManager.Instance.PlayMusic("PlayGameMusic");
-        Debug.Log("OK da phat nhac");
-        AudioManager.Instance.audioListener.enabled = false;
+        //AudioManager.Instance.audioListener.enabled = false;
     }
 
     private IEnumerator LoadSceneRoutine()
     {
-
-
         photonView.RPC("ShowLoadingScreen", RpcTarget.All);
         //ShowLoadingScreen();
         Debug.Log("OK k sao");
@@ -61,7 +54,6 @@ public class LoadingScreenManager : MonoBehaviourPunCallbacks
     [PunRPC]
     public void ShowLoadingScreen()
     {
-        Debug.Log("OK loading k loi");
         loadingScreen.SetActive(true);
     }
 
@@ -70,5 +62,4 @@ public class LoadingScreenManager : MonoBehaviourPunCallbacks
     {
         loadingScreen.SetActive(false);
     }
-
 }

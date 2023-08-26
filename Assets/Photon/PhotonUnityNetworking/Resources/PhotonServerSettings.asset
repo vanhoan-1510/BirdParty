@@ -51,6 +51,14 @@ MonoBehaviour:
   - LoadScreen
   - SyncMusic
   - WheelSpinRoutine
+  - SyncFlySound
+  - SyncWalkSound
+  - StopFlySound
+  - RotateTrampoline
+  - RotateTrampolineBack
+  - Move
+  - CountTime
+  - Rotate
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1

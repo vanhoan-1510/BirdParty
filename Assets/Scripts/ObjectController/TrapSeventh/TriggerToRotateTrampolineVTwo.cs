@@ -1,7 +1,8 @@
 using System.Collections;
 using UnityEngine;
+using Photon.Pun;
 
-public class TriggerToRotateTrampolineVTwo : MonoBehaviour
+public class TriggerToRotateTrampolineVTwo : MonoBehaviourPunCallbacks
 {
     [SerializeField] private float rotateSpeed = 15f;
 
@@ -33,9 +34,16 @@ public class TriggerToRotateTrampolineVTwo : MonoBehaviour
     {
         if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
-            isRotated = true;
-            trap.SetActive(true);
+            RotateTrampoline();
+            photonView.RPC("RotateTrampoline", RpcTarget.All);
         }
+    }
+
+    [PunRPC]
+    public void RotateTrampoline()
+    {
+        isRotated = true;
+        trap.SetActive(true);
     }
 
     private void OnCollisionExit(Collision collision)

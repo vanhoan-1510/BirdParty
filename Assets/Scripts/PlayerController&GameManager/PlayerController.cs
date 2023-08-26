@@ -43,6 +43,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
     private GameObject parentObjRight;
     private GameObject parentBTwoObject;
     private GameObject spindleTrap;
+    private GameObject parentTrampolineObject;
     private GameObject parentTrampolineObjectVTwo;
     private GameObject parentGroundBounceRight;
     private GameObject parentDeathObject;
@@ -55,6 +56,9 @@ public class PlayerController : MonoBehaviourPunCallbacks
     public GameObject player;
     private Vector3 lastCheckpointPosition;
 
+    AudioSource[] playerAudioSources;
+
+    int soundState;
 
     private void Awake()
     {
@@ -64,6 +68,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
         player = this.gameObject;
         rb = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
+        playerAudioSources = GetComponents<AudioSource>();
     }
 
     void Start()
@@ -77,16 +82,29 @@ public class PlayerController : MonoBehaviourPunCallbacks
         parentObjRight = GameManager.Instance.parentObjRight;
         parentBTwoObject = GameManager.Instance.parentBTwoObject;
         spindleTrap = GameManager.Instance.spindleTrap;
+        parentTrampolineObject = GameManager.Instance.parentTrampolineObject;
         parentTrampolineObjectVTwo = GameManager.Instance.parentTrampolineObjectVTwo;
         parentGroundBounceRight = GameManager.Instance.parentGroundBounceRight;
         parentDeathObject = GameManager.Instance.parentDeathObject;
 
         currentMana = maxMana;
         powerBar.SetMaxMana(maxMana);
+
+        soundState = PlayerPrefs.GetInt("SoundState");
+
+        if (AudioManager.Instance.playerAudioSources[1] != null && soundState == 1)
+        {
+            AudioManager.Instance.playerAudioSources[1].enabled = true;
+            AudioManager.Instance.playerAudioSources[3].enabled = false;
+        }
     }
 
     void Update()
     {
+        if(Input.GetKeyDown(KeyCode.M))
+        {
+            playerAudioSources[3].enabled = false;
+        }
         // ground check
         grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f, whatIsGround);
 
@@ -102,6 +120,22 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
     private void MyInput()
     {
+        if ((Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.D)) 
+            && grounded && soundState == 1)
+        {
+            if (AudioManager.Instance.playerAudioSources[3] != null)
+            {
+                AudioManager.Instance.playerAudioSources[3].enabled = true;
+            }
+        }
+        else
+        {
+            if (AudioManager.Instance.playerAudioSources[3] != null)
+            {
+                AudioManager.Instance.playerAudioSources[3].enabled = false;
+            }
+        }
+
         if (isCooldown)
         {
             return;
@@ -112,12 +146,10 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
         if (Input.GetButtonDown("Jump") && !mJumping && grounded)
         {
-            photonView.RPC("SyncJumpSound", RpcTarget.All);
-            //SyncJumpSound();
+            AudioManager.Instance.PlaySFX("Jumping");
             mJumping = true;
             animator.SetBool("isJumping", true);
 
-            //rb.AddForce(Vector3.up * jumpSpeed, ForceMode.VelocityChange);
             rb.velocity = new Vector3(rb.velocity.x, jumpForce, rb.velocity.z);
 
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
@@ -130,6 +162,12 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
         if (Input.GetKey(KeyCode.LeftShift) && (horizontalInput != 0 || verticalInput != 0) && currentMana > 0)
         {
+            if (AudioManager.Instance.playerAudioSources[2] != null && soundState == 1)
+            {
+                AudioManager.Instance.playerAudioSources[2].enabled = true;
+                AudioManager.Instance.playerAudioSources[3].enabled = false;
+            }
+
             mSprinting = true;
 
             currentMana -= manaReduce * Time.deltaTime;
@@ -137,10 +175,16 @@ public class PlayerController : MonoBehaviourPunCallbacks
             if (currentMana < 0)
             {
                 currentMana = 0;
+                PlayerAudioManager.Instance.EndingFlySound();
             }
         }
         else
         {
+            if (AudioManager.Instance.playerAudioSources[2] != null)
+            {
+                AudioManager.Instance.playerAudioSources[2].enabled = false;
+            }
+            
             mSprinting = false;
             currentMana += manaRecovery * Time.deltaTime;
             if(currentMana >= maxMana)
@@ -175,12 +219,6 @@ public class PlayerController : MonoBehaviourPunCallbacks
         Quaternion targetRotation = Quaternion.Euler(0, mDesiredRotation, 0);
         transform.rotation = Quaternion.Lerp(currentRotation, targetRotation, rotationSpeed * Time.deltaTime);
     }
-
-    [PunRPC]
-    private void SyncJumpSound()
-    {
-        AudioManager.Instance.PlayPlayerSFXSound("Jumping");
-    }
         
     public void Falling()
     {
@@ -203,6 +241,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
     {
         // Save the checkpoint position for the player
         lastCheckpointPosition = checkpointPosition;
+        AudioManager.Instance.PlaySFX("CheckPoint");
         Debug.Log("Checkpoint saved for player: " + photonView.Owner.NickName);
     }
 
@@ -210,8 +249,14 @@ public class PlayerController : MonoBehaviourPunCallbacks
     {
         if (transform.position.y < -20f)
         {
+            AudioManager.Instance.playerAudioSources[1].enabled = false;
             player.transform.position = lastCheckpointPosition;
             Debug.Log("Player respawned at last checkpoint: " + photonView.Owner.NickName);
+
+            if(AudioManager.Instance.playerAudioSources[1] != null && soundState == 1)
+            {
+                AudioManager.Instance.playerAudioSources[1].enabled = true;
+            }
         }
     }
 
@@ -227,11 +272,13 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
         if (collision.gameObject.layer == LayerMask.NameToLayer("BounceTrap"))
         {
+            AudioManager.Instance.PlaySFX("Collision");
             // Get the surface normal of the contact point between the character and the object it collides with
             surfaceNormal = collision.contacts[0].normal;
 
             if (IsChildOfParent(collision.gameObject, parentBTwoObject))
             {
+
                 // Get the direction from the rotating object to the player
                 bounceDirection = transform.position - collision.transform.position;
                 bounceDirection.y = 0f;
@@ -240,36 +287,50 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
             if (IsChildOfParent(collision.gameObject, parentObjLeft))
             {
+                AudioManager.Instance.PlaySFX("Eggy3");
                 bounceDirection = Quaternion.Euler(0f, 0f, 45f) * surfaceNormal;
                 bounceForce = 10f;
+
             }
 
             if (IsChildOfParent(collision.gameObject, parentObjRight))
             {
+                AudioManager.Instance.PlaySFX("Eggy3");
                 bounceDirection = Quaternion.Euler(0f, 0f, -45f) * surfaceNormal;
                 bounceForce = 10f;
             }
 
             if(IsChildOfParent(collision.gameObject, spindleTrap))
             {
+                AudioManager.Instance.PlaySFX("Eggy3");
                 bounceDirection = transform.position - collision.transform.position;
                 bounceForce = 20f;
             }
 
+            if(IsChildOfParent(collision.gameObject, parentTrampolineObject))
+            {
+                AudioManager.Instance.PlaySFX("Eggy2");
+                bounceDirection = Quaternion.Euler(45f, 0f, 0f) * surfaceNormal;
+                bounceForce = 10f;
+            }
+
             if(IsChildOfParent(collision.gameObject, parentTrampolineObjectVTwo))
             {
+                AudioManager.Instance.PlaySFX("Eggy2");
                 bounceDirection = Quaternion.Euler(45f, 0f, 0f) * surfaceNormal;
                 bounceForce = 10f;
             }
 
             if(IsChildOfParent(collision.gameObject, parentGroundBounceRight))
             {
+                AudioManager.Instance.PlaySFX("Eggy1");
                 bounceDirection = Quaternion.Euler(-45f, 0f, 0f) * surfaceNormal;
                 bounceForce = 10f;
             }
 
             if (IsChildOfParent(collision.gameObject, parentDeathObject))
             {
+                AudioManager.Instance.PlaySFX("Eggy3");
                 //load checkpoint
                 StartCoroutine(WaitToLoadCheckPoint(1f));
                 bounceForce = 0f;
@@ -280,6 +341,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
         if(collision.gameObject.layer == LayerMask.NameToLayer("Ball"))
         {
+            AudioManager.Instance.PlaySFX("Eggy3");
             animator.SetBool("isFalling", true);
             isTouchingRotatingObject = true;
             isCooldown = true;
@@ -292,6 +354,11 @@ public class PlayerController : MonoBehaviourPunCallbacks
         if (collision.gameObject.layer == LayerMask.NameToLayer("BounceTrap"))
         {
             isTouchingRotatingObject = false;
+        }
+
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
+        {
+            AudioManager.Instance.playerAudioSources[3].enabled = false;
         }
     }
 
@@ -306,7 +373,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
         isCooldown = true;
     }
 
-    private bool IsChildOfParent(GameObject childObject, GameObject parentObject)
+    public bool IsChildOfParent(GameObject childObject, GameObject parentObject)
     {
         Transform parentTransform = childObject.transform.parent;
         while (parentTransform != null)
