@@ -6,3 +6,10 @@ My objective is to create an immersive experience filled with creativity. Throug
 In summary, "Birds Party" merges innovation, visuals, and social interaction, providing an appealing choice for adventure seekers. My aspiration is to deliver a game that empowers players to conquer challenges and relish the thrill of exploration.
 
 This product is a graduation project created by myself, serving only for educational purposes. If there are any inquiries, please contact via email: hoangvanhoan1510@gmail.com.
+
+**Game Features**
+
+
+
+https://github.com/vanhoan-1510/BirdParty/assets/65796020/bae932c0-c978-45e8-b44a-93ec0d3b64ae
+
